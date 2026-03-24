@@ -99,32 +99,58 @@ export class CdpService extends EventEmitter {
             const req = http.get(url, (res) => {
                 if (res.statusCode && (res.statusCode < 200 || res.statusCode >= 300)) {
                     res.resume(); // drain response
-                    reject(new Error(`HTTP ${res.statusCode} from ${url}`));
+                    const error = new Error(`HTTP ${res.statusCode} from ${url}`);
+                    logger.warn(`[CdpService] getJson failed: ${error.message}`);
+                    reject(error);
                     return;
                 }
                 let data = '';
                 res.on('data', chunk => data += chunk);
                 res.on('end', () => {
-                    try { resolve(JSON.parse(data)); } catch (e) { reject(e); }
+                    try { resolve(JSON.parse(data)); } catch (e) {
+                        logger.warn(`[CdpService] Failed to parse JSON from ${url}:`, e);
+                        reject(e);
+                    }
                 });
             });
-            req.on('error', reject);
+            req.on('error', (e) => {
+                logger.warn(`[CdpService] Network error fetching ${url}:`, e.message);
+                reject(e);
+            });
             req.setTimeout(5000, () => {
                 req.destroy();
-                reject(new Error(`Timeout fetching ${url}`));
+                const error = new Error(`Timeout fetching ${url}`);
+                logger.warn(`[CdpService] ${error.message}`);
+                reject(error);
             });
         });
     }
 
-    async discoverTarget(): Promise<string> {
-        let allPages: any[] = [];
+    /**
+     * Scan all ports for CDP targets and return a list of all found pages.
+     */
+    private async scanAllPorts(): Promise<any[]> {
+        const allPages: any[] = [];
+        logger.debug(`[CdpService] Scanning ${this.ports.length} ports for CDP targets: ${this.ports.join(', ')}`);
         for (const port of this.ports) {
             try {
                 const list = await this.getJson(`http://127.0.0.1:${port}/json/list`);
-                allPages.push(...list);
+                if (Array.isArray(list)) {
+                    allPages.push(...list);
+                    logger.debug(`[CdpService] Port ${port}: found ${list.length} targets`);
+                }
             } catch (e) {
-                // Ignore port not found
+                // Ignore port not responding
             }
+        }
+        return allPages;
+    }
+
+    async discoverTarget(): Promise<string> {
+        const allPages = await this.scanAllPorts();
+
+        if (allPages.length === 0) {
+            logger.warn(`[CdpService] No CDP targets found on any scanned port.`);
         }
 
         let target = allPages.find(t =>
@@ -152,6 +178,7 @@ export class CdpService extends EventEmitter {
 
         if (target && target.webSocketDebuggerUrl) {
             this.targetUrl = target.webSocketDebuggerUrl;
+            logger.info(`[CdpService] Target established: ${this.targetUrl} (title="${target.title}")`);
             // Extract workspace name from title (e.g., "ProjectName — Antigravity")
             if (target.title && !this.currentWorkspaceName) {
                 const titleParts = target.title.split(/\s[—–-]\s/);
@@ -176,11 +203,27 @@ export class CdpService extends EventEmitter {
 
         await new Promise<void>((resolve, reject) => {
             if (!this.ws) return reject(new Error('WebSocket not initialized'));
+
+            const connectTimeout = setTimeout(() => {
+                if (this.ws) {
+                    this.ws.removeAllListeners();
+                    this.ws.terminate();
+                    this.ws = null;
+                }
+                reject(new Error(`CDP connection timeout for ${this.targetUrl}`));
+            }, 10000);
+
             this.ws.on('open', () => {
+                clearTimeout(connectTimeout);
                 this.isConnectedFlag = true;
+                logger.info(`[CdpService] WebSocket connected to ${this.targetUrl}`);
                 resolve();
             });
-            this.ws.on('error', reject);
+            this.ws.on('error', (err) => {
+                clearTimeout(connectTimeout);
+                logger.error(`[CdpService] WebSocket error:`, err);
+                reject(err);
+            });
         });
 
         this.ws.on('message', (msg: WebSocket.Data) => {
@@ -228,6 +271,13 @@ export class CdpService extends EventEmitter {
 
         // Initialize Runtime to get execution contexts
         await this.call('Runtime.enable', {});
+
+        // Enable Runtime.addBinding for event-driven DOM monitoring
+        try {
+            await this.call('Runtime.addBinding', { name: 'onRemoatDOMChange' });
+        } catch (err) {
+            logger.warn('[CdpService] Runtime.addBinding failed (non-fatal):', err);
+        }
 
         // Enable Network domain for event-based completion detection
         try {
@@ -349,15 +399,20 @@ export class CdpService extends EventEmitter {
 
         for (const port of this.ports) {
             try {
+                logger.debug(`[CdpService] Checking port ${port}...`);
                 const list = await this.getJson(`http://127.0.0.1:${port}/json/list`);
                 pages.push(...list);
                 // Prioritize recording ports that contain workbench pages
                 const hasWorkbench = list.some((t: any) => t.url?.includes('workbench'));
-                if (hasWorkbench && respondingPort === null) {
-                    respondingPort = port;
+                if (hasWorkbench) {
+                    logger.debug(`[CdpService] Port ${port} responded and contains workbench pages.`);
+                    if (respondingPort === null) respondingPort = port;
+                } else {
+                    logger.debug(`[CdpService] Port ${port} responded but no workbench pages found.`);
                 }
-            } catch {
+            } catch (err: any) {
                 // No response from this port, next
+                logger.debug(`[CdpService] Port ${port} did not respond: ${err.message}`);
             }
         }
 
@@ -381,9 +436,9 @@ export class CdpService extends EventEmitter {
                 t.url?.includes('workbench'),
         );
 
-        logger.debug(`[CdpService] Searching for workspace "${projectName}" (port=${respondingPort})... ${workbenchPages.length} workbench pages:`);
+        logger.debug(`[CdpService] Searching for workspace "${projectName}"... ${workbenchPages.length} workbench pages found across ${this.ports.length} ports.`);
         for (const p of workbenchPages) {
-            logger.debug(`  - title="${p.title}" url=${p.url}`);
+            logger.debug(`  - page.id="${p.id}" title="${p.title}" url=${p.url}`);
         }
 
         // 1. Title match (fast path)
@@ -449,17 +504,19 @@ export class CdpService extends EventEmitter {
                     returnByValue: true,
                 });
                 const liveTitle = String(result?.result?.value || '');
+                logger.debug(`[CdpService] Probing page "${page.id}": live document.title="${liveTitle}"`);
                 const normalizedLiveTitle = liveTitle.toLowerCase();
                 const normalizedProject = projectName.toLowerCase();
 
                 if (normalizedLiveTitle.includes(normalizedProject)) {
                     this.currentWorkspaceName = projectName;
-                    logger.debug(`[CdpService] Probe success: detected "${projectName}"`);
+                    logger.debug(`[CdpService] Probe match success: title "${liveTitle}" contains "${projectName}"`);
                     return true;
                 }
 
                 // If title is "Untitled (Workspace)", verify by folder path
                 if (normalizedLiveTitle.includes('untitled') && workspacePath) {
+                    logger.debug(`[CdpService] Title is untitled, attempting folder path probe for "${projectName}"...`);
                     const folderMatch = await this.probeWorkspaceFolderPath(projectName, workspacePath);
                     if (folderMatch) {
                         return true;
@@ -524,6 +581,7 @@ export class CdpService extends EventEmitter {
             const value = res?.result?.value;
             if (value?.found && value?.value) {
                 const detectedValue = value.value as string;
+                logger.debug(`[CdpService] Folder probe (source=${value.source}): detected value="${detectedValue}"`);
 
                 const normalizedDetected = detectedValue.toLowerCase();
                 const normalizedProject = projectName.toLowerCase();
@@ -534,7 +592,7 @@ export class CdpService extends EventEmitter {
                     normalizedDetected.includes(normalizedWorkspace)
                 ) {
                     this.currentWorkspaceName = projectName;
-                    logger.debug(`[CdpService] Folder path match success: "${projectName}"`);
+                    logger.debug(`[CdpService] Folder path match success (source=${value.source})`);
                     return true;
                 }
             }
@@ -609,7 +667,10 @@ export class CdpService extends EventEmitter {
             }
         }
 
+        let pollCount = 0;
         while (Date.now() - startTime < maxWaitMs) {
+            pollCount++;
+            logger.debug(`[CdpService] Polling for new workbench page (attempt ${pollCount}, elapsed ${Math.floor((Date.now() - startTime) / 1000)}s)...`);
             await new Promise(r => setTimeout(r, pollIntervalMs));
 
             let pages: any[] = [];
@@ -622,7 +683,10 @@ export class CdpService extends EventEmitter {
                 }
             }
 
-            if (pages.length === 0) continue;
+            if (pages.length === 0) {
+                logger.debug(`[CdpService] Poll: No CDP ports responding yet.`);
+                continue;
+            }
 
             const workbenchPages = pages.filter(
                 (t: any) =>
@@ -633,15 +697,19 @@ export class CdpService extends EventEmitter {
                     t.url?.includes('workbench'),
             );
 
+            logger.debug(`[CdpService] Poll: found ${workbenchPages.length} workbench pages.`);
+
             // Title match
             const titleMatch = workbenchPages.find((t: any) => t.title?.toLowerCase().includes(projectName.toLowerCase()));
             if (titleMatch) {
+                logger.debug(`[CdpService] Poll success: found page with title matching "${projectName}"`);
                 return this.connectToPage(titleMatch, projectName);
             }
 
             // CDP probe (also check folder path if title is not updated)
             const probeResult = await this.probeWorkbenchPages(workbenchPages, projectName, workspacePath);
             if (probeResult) {
+                logger.debug(`[CdpService] Poll success: probe identified page for "${projectName}"`);
                 return true;
             }
 
@@ -654,7 +722,7 @@ export class CdpService extends EventEmitter {
                         (t.title?.includes('Untitled') || t.title === ''),
                 );
                 if (newUntitledPages.length === 1) {
-                    logger.debug(`[CdpService] New Untitled page detected. Connecting as "${projectName}" (page.id=${newUntitledPages[0].id})`);
+                    logger.info(`[CdpService] Poll fallback: New Untitled page detected. Connecting as "${projectName}" (page.id=${newUntitledPages[0].id})`);
                     return this.connectToPage(newUntitledPages[0], projectName);
                 }
             }

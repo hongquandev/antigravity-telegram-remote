@@ -607,6 +607,32 @@ export const RESPONSE_SELECTORS = {
         }
         return diag;
     })()`,
+    /** Injected MutationObserver to push DOM changes via addBinding */
+    DOM_OBSERVER: `(() => {
+        const panel = document.querySelector('.antigravity-agent-side-panel') || document.body;
+        // Clean up previous observer if exists
+        if (window._remoatObserver) window._remoatObserver.disconnect();
+        
+        let debounceTimer;
+        const notify = () => {
+            if (typeof window.onRemoatDOMChange === 'function') {
+                window.onRemoatDOMChange('changed');
+            }
+        };
+
+        window._remoatObserver = new MutationObserver((mutations) => {
+            clearTimeout(debounceTimer);
+            // Throttle to 100ms to avoid flooding CDP during rapid streaming
+            debounceTimer = setTimeout(notify, 100);
+        });
+
+        window._remoatObserver.observe(panel, {
+            childList: true,
+            subtree: true,
+            characterData: true
+        });
+        return { ok: true, observing: panel.className || 'body' };
+    })()`,
 };
 
 /** Response generation phases */
@@ -673,6 +699,10 @@ export class ResponseMonitor {
     private lastExtractionSource: 'structured' | 'legacy' | null = null;
     /** Consecutive WebSocket error count — stops monitor after threshold */
     private consecutiveWsErrors: number = 0;
+    /** Timer for debouncing events from the browser */
+    private domChangedDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+    /** Listener for CDP binding events */
+    private bindingListener: ((params: any) => void) | null = null;
 
     constructor(options: ResponseMonitorOptions) {
         this.cdpService = options.cdpService;
@@ -687,6 +717,14 @@ export class ResponseMonitor {
         this.onPhaseChange = options.onPhaseChange;
         this.onProcessLog = options.onProcessLog;
         this.onThinkingLog = options.onThinkingLog;
+
+        // Listen for push notifications from the browser
+        this.bindingListener = (params: any) => {
+            if (params.name === 'onRemoatDOMChange' && this.isRunning) {
+                this.handleDomChangedEvent();
+            }
+        };
+        this.cdpService.on('Runtime.bindingCalled', this.bindingListener);
     }
 
     /** Start monitoring */
@@ -782,6 +820,14 @@ export class ResponseMonitor {
             }, this.maxDurationMs);
         }
 
+        // Inject the MutationObserver for real-time push notifications
+        try {
+            await this.cdpService.call('Runtime.evaluate', this.buildEvaluateParams(RESPONSE_SELECTORS.DOM_OBSERVER));
+            logger.debug('[ResponseMonitor] MutationObserver injected successfully');
+        } catch (err) {
+            logger.warn('[ResponseMonitor] Failed to inject MutationObserver (falling back to pure polling):', err);
+        }
+
         const mode = passive ? 'Passive monitoring' : 'Monitoring';
         logger.debug(
             `── ${mode} started | poll=${this.pollIntervalMs}ms timeout=${this.maxDurationMs / 1000}s baseline=${this.baselineText?.length ?? 0}ch`,
@@ -801,6 +847,43 @@ export class ResponseMonitor {
             clearTimeout(this.timeoutTimer);
             this.timeoutTimer = null;
         }
+        if (this.domChangedDebounceTimer) {
+            clearTimeout(this.domChangedDebounceTimer);
+            this.domChangedDebounceTimer = null;
+        }
+
+        if (this.bindingListener) {
+            this.cdpService.off('Runtime.bindingCalled', this.bindingListener);
+        }
+    }
+
+    /**
+     * Handle DOM change event from the browser.
+     * Triggers an immediate poll with debouncing.
+     */
+    private handleDomChangedEvent(): void {
+        if (!this.isRunning) return;
+
+        // If we're already generating, use a shorter debounce to keep up with streaming
+        const debounceMs = this.currentPhase === 'generating' ? 200 : 500;
+
+        if (this.domChangedDebounceTimer) {
+            clearTimeout(this.domChangedDebounceTimer);
+        }
+
+        this.domChangedDebounceTimer = setTimeout(async () => {
+            if (!this.isRunning) return;
+            logger.debug('[ResponseMonitor] Event-triggered poll');
+            // Check if another poll is already clearing
+            if (this.pollTimer) {
+                clearTimeout(this.pollTimer);
+                this.pollTimer = null;
+            }
+            await this.poll();
+            if (this.isRunning) {
+                this.schedulePoll();
+            }
+        }, debounceMs);
     }
 
     /** Get current phase */

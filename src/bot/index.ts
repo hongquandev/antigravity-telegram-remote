@@ -754,7 +754,7 @@ async function sendPromptToAntigravity(
         isFinalized = true;
         userStopRequestedChannels.delete(channelKey(channel));
         if (elapsedTimer) { clearInterval(elapsedTimer); }
-        if (monitor) { await monitor.stop().catch(() => {}); }
+        if (monitor) { await monitor.stop().catch(() => { }); }
         await sendEmbed(`${PHASE_ICONS.error} Error`, t(`Error occurred during processing: ${e.message}`));
     }
 }
@@ -1123,8 +1123,12 @@ export const startBot = async (cliLogLevel?: LogLevel) => {
         const key = channelKey(ch);
         const session = chatSessionRepo.findByChannelId(key);
 
+        logger.debug(`[/chat] Command received. channelKey="${key}" lastActiveWorkspace="${bridge.lastActiveWorkspace || '(none)'}"`);
+
         if (!session) {
             const activeNames = bridge.pool.getActiveWorkspaceNames();
+            logger.debug(`[/chat] No session bound to this channel. activeNames in pool: ${activeNames.join(', ') || '(empty)'}`);
+
             const anyCdp = activeNames.length > 0 ? bridge.pool.getConnected(activeNames[0]) : null;
             const info = anyCdp
                 ? await chatSessionService.getCurrentSessionInfo(anyCdp)
@@ -1134,7 +1138,8 @@ export const startBot = async (cliLogLevel?: LogLevel) => {
                 `<b>💬 Chat Session Info</b>\n\n` +
                 `<b>Title:</b> ${escapeHtml(info.title)}\n` +
                 `<b>Status:</b> ${info.hasActiveChat ? '🟢 Active' : '⚪ Inactive'}\n\n` +
-                `<i>Use /project to bind a project first.</i>`
+                `<i>No project bound to this chat thread. Use /project to select one.</i>\n` +
+                `<code>Key: ${key}</code>`
             );
             return;
         }

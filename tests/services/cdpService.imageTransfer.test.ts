@@ -51,7 +51,7 @@ describe('CdpService - Image Transfer', () => {
                     return;
                 }
 
-                if (req.method === 'Network.enable') {
+                if (req.method === 'Network.enable' || req.method === 'Runtime.addBinding') {
                     ws.send(JSON.stringify({ id: req.id, result: {} }));
                     return;
                 }

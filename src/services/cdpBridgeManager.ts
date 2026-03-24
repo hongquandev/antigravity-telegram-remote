@@ -216,8 +216,11 @@ export function getCurrentCdp(bridge: CdpBridge): CdpService | null {
     // Fallback: return any connected workspace
     const activeNames = bridge.pool.getActiveWorkspaceNames();
     if (activeNames.length > 0) {
-        return bridge.pool.getConnected(activeNames[0]);
+        const fallbackName = activeNames[0];
+        logger.debug(`[CdpBridge] Workspace "${bridge.lastActiveWorkspace || '(none)'}" not connected. Falling back to "${fallbackName}"`);
+        return bridge.pool.getConnected(fallbackName);
     }
+    logger.warn(`[CdpBridge] No connected workspaces found.`);
     return null;
 }
 

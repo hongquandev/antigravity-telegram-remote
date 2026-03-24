@@ -36,6 +36,8 @@ function createMockCdpService() {
     return {
         call: jest.fn().mockResolvedValue({ result: { value: null } }),
         getPrimaryContextId: jest.fn().mockReturnValue(1),
+        on: jest.fn(),
+        off: jest.fn(),
     };
 }
 
@@ -108,9 +110,9 @@ describe('Lean ResponseMonitor (new API)', () => {
 
         expect(phases).toContain('waiting');
         expect(monitor.getPhase()).toBe('waiting');
-        // Baseline should have been captured via 2 CDP calls:
-        // 1. RESPONSE_TEXT baseline, 2. PROCESS_LOGS baseline
-        expect(cdpService.call).toHaveBeenCalledTimes(2);
+        // Baseline should have been captured via 3 CDP calls:
+        // 1. RESPONSE_TEXT baseline, 2. PROCESS_LOGS baseline, 3. DOM_OBSERVER injection
+        expect(cdpService.call).toHaveBeenCalledTimes(3);
 
         await monitor.stop();
     });
@@ -422,9 +424,9 @@ describe('Lean ResponseMonitor (new API)', () => {
     });
 
     // ---------------------------------------------------------------
-    // Test 11: NO network event subscription (cdpService.on should NOT be called)
+    // Test 11: Subscribes to push notifications (Runtime.bindingCalled)
     // ---------------------------------------------------------------
-    it('does NOT subscribe to network events (no cdpService.on calls)', async () => {
+    it('subscribes to push notifications (Runtime.bindingCalled)', async () => {
         const monitor = createMonitor();
 
         cdpService.call
@@ -432,14 +434,12 @@ describe('Lean ResponseMonitor (new API)', () => {
             .mockResolvedValueOnce(cdpResult(null));
         await monitor.start();
 
-        // The new lean monitor should NOT call on() on the cdpService
-        expect(cdpService).not.toHaveProperty('on');
-        // If it has an 'on' mock somehow, ensure it was never called
-        if (typeof (cdpService as any).on === 'function') {
-            expect((cdpService as any).on).not.toHaveBeenCalled();
-        }
+        // The new monitor SHOULD subscribe to Runtime.bindingCalled
+        expect(cdpService.on).toHaveBeenCalledWith('Runtime.bindingCalled', expect.any(Function));
 
         await monitor.stop();
+        // and unsubscribe on stop
+        expect(cdpService.off).toHaveBeenCalledWith('Runtime.bindingCalled', expect.any(Function));
     });
 
     // ---------------------------------------------------------------

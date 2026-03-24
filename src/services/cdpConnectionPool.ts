@@ -50,16 +50,20 @@ export class CdpConnectionPool extends EventEmitter {
         if (existing) {
             if (existing.isConnected()) {
                 try {
+                    logger.debug(`[CdpConnectionPool] Re-validating existing connection for "${projectName}"...`);
                     // Re-validate that the still-open window is actually bound to this workspace.
                     await existing.discoverAndConnectForWorkspace(workspacePath);
+                    logger.debug(`[CdpConnectionPool] Existing connection for "${projectName}" is still valid.`);
                     return existing;
-                } catch {
+                } catch (err) {
                     // Connection dropped during re-validation; close WebSocket and clean up
+                    logger.warn(`[CdpConnectionPool] Connection for "${projectName}" dropped during re-validation:`, err);
                     existing.disconnect().catch(() => {});
                     this.connections.delete(projectName);
                 }
             } else {
                 // Stale disconnected entry (e.g. reconnect was disabled) — clean up
+                logger.debug(`[CdpConnectionPool] Removing stale disconnected entry for "${projectName}"`);
                 this.connections.delete(projectName);
             }
         }
@@ -220,8 +224,11 @@ export class CdpConnectionPool extends EventEmitter {
      */
     getActiveWorkspaceNames(): string[] {
         const active: string[] = [];
+        logger.debug(`[CdpConnectionPool] getActiveWorkspaceNames: total connections in pool = ${this.connections.size}`);
         for (const [name, cdp] of this.connections) {
-            if (cdp.isConnected()) {
+            const connected = cdp.isConnected();
+            logger.debug(`  - Workspace "${name}": connected=${connected}`);
+            if (connected) {
                 active.push(name);
             }
         }
