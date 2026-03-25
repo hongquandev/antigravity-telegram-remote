@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.2.12] - 2026-03-25
+
+### Fixed
+- **Security Audit**: Patched Path Traversal vulnerability using `realpathSync` to prevent symlink bypass.
+- **Performance Optimization**: Refactored response monitoring to use a **MutationObserver** + **CDP Binding** (Event-Driven) for instant DOM updates (<100ms) with significantly lower CPU overhead.
+- **Repository Branding**: Migrated links and homepage from `hongquandev/remoat` to `hongquandev/antigravity-telegram-remote`.
+
 ## [0.2.2] - 2026-03-02
 
 ### Changed

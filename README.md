@@ -22,7 +22,7 @@
 
 ---
 
-**Remoat** (Antigravity-Telegram-Remote) là một **Telegram Bot cục bộ** mạnh mẽ, cho phép bạn điều khiển từ xa IDE [Antigravity](https://antigravity.dev) trên PC — từ điện thoại, máy tính bảng hoặc bất cứ thiết bị nào có Telegram.
+**AntiT** (Antigravity-Telegram-Remote) là một **Telegram Bot cục bộ** mạnh mẽ, cho phép bạn điều khiển từ xa IDE [Antigravity](https://antigravity.dev) trên PC — từ điện thoại, máy tính bảng hoặc bất cứ thiết bị nào có Telegram.
 
 Chỉ cần gõ hướng dẫn bằng ngôn ngữ tự nhiên, đính kèm ảnh chụp màn hình hoặc gửi ghi âm giọng nói. Remoat sẽ chuyển tiếp đến Antigravity qua Chrome DevTools Protocol (CDP), giám sát tiến trình thực tế theo thời gian thực và phản hồi kết quả trực tiếp về Telegram. **Tất cả dữ liệu và mã nguồn đều nằm an toàn trên máy của bạn.**
 
@@ -33,7 +33,9 @@ Chỉ cần gõ hướng dẫn bằng ngôn ngữ tự nhiên, đính kèm ảnh
 *   **⏱️ Theo dõi tiến độ trực tiếp:** Tác vụ chạy dài sẽ báo cáo trạng thái theo từng giai đoạn (Suy nghĩ, Chỉnh sửa file, Chạy lệnh...) với bộ đếm thời gian thực.
 *   **🎙️ Hỗ trợ Giọng nói (Local Whisper):** Ghi âm và gửi. Remoat dịch giọng nói ngay trên máy bạn qua [whisper.cpp](https://github.com/ggerganov/whisper.cpp) — không cần API đám mây, bảo mật tuyệt đối.
 *   **✅ Phê duyệt từ xa:** Khi Antigravity yêu cầu xác nhận (sửa file, kế hoạch...), bạn sẽ nhận được thông báo kèm nút bấm ngay trong Telegram. Hoặc dùng `/autoaccept` để bot tự phê duyệt.
-*   **🔒 Bảo mật tối đa:** Chỉ những User ID nằm trong danh sách trắng (whitelist) mới có quyền truy cập. Không có webhook công khai, không cần mở port trên router.
+*   **⚡ Tối ưu Event-Driven:** Sử dụng `MutationObserver` và `CDP Binding` để phát hiện thay đổi DOM tức thì (<100ms). Tin nhắn Telegram được cập nhật mượt mà và tiết kiệm tài nguyên CPU vượt trội.
+*   **🛡️ Bảo mật nâng cao (Security Audited):** Đã kiểm định và vá các lỗ hổng Path Traversal bằng giải thuật `realpath` (chống bypass qua symlinks). Toàn bộ dữ liệu nằm cục bộ, không có nguy cơ lộ lọt mã nguồn.
+*   **🔒 Whitelist & Isolation:** Chỉ User ID được phép mới có quyền truy cập. Mỗi dự án được cách ly hoàn toàn trong các Forum Topic riêng biệt.
 
 ## 🛠️ Cài đặt nhanh (Quick Start)
 
