@@ -4,10 +4,10 @@ import * as path from 'path';
 
 export type Language = 'en' | 'ja' | 'vi';
 
-let currentLanguage: Language = 'en';
+let currentLanguage: Language = 'vi';
 let translations: Record<string, Record<string, string>> = {};
 
-export function initI18n(lang: Language = 'en') {
+export function initI18n(lang: Language = 'vi') {
     currentLanguage = lang;
     loadTranslations();
 }

@@ -1,5 +1,4 @@
 import { InlineKeyboard } from 'grammy';
-import { t } from '../utils/i18n';
 import { escapeHtml } from '../utils/telegramFormatter';
 
 export const PROJECT_SELECT_ID = 'project_select';
@@ -24,12 +23,13 @@ export function buildProjectListUI(
     workspaces: string[],
     page: number = 0,
 ): { text: string; keyboard: InlineKeyboard } {
+    console.log(`[DEBUG] buildProjectListUI: wsCount=${workspaces.length}, page=${page}`);
     const totalPages = Math.max(1, Math.ceil(workspaces.length / ITEMS_PER_PAGE));
     const safePage = Math.max(0, Math.min(page, totalPages - 1));
 
     if (workspaces.length === 0) {
         return {
-            text: `<b>📁 Projects</b>\n\n${t('No projects found.')}`,
+            text: `<b>📁 Dự án</b>\n\nKhông tìm thấy dự án nào.`,
             keyboard: new InlineKeyboard(),
         };
     }
@@ -42,12 +42,12 @@ export function buildProjectListUI(
         `${start + i + 1}. ${escapeHtml(ws)}`,
     );
 
-    let text = `<b>📁 Projects</b>\n\n` +
-        t('Select a project to auto-create a topic and session') + `\n\n` +
+    let text = `<b>📁 Dự án</b>\n\n` +
+        `Chọn một dự án để tự động tạo topic và phiên làm việc` + `\n\n` +
         lines.join('\n');
 
     if (totalPages > 1) {
-        text += `\n\n<i>Page ${safePage + 1} / ${totalPages} (${workspaces.length} projects total)</i>`;
+        text += `\n\n<i>Trang ${safePage + 1} / ${totalPages} (${workspaces.length} tổng số dự án)</i>`;
     }
 
     const keyboard = new InlineKeyboard();
@@ -59,10 +59,10 @@ export function buildProjectListUI(
 
     if (totalPages > 1) {
         if (safePage > 0) {
-            keyboard.text('◀ Prev', `${PROJECT_PAGE_PREFIX}:${safePage - 1}`);
+            keyboard.text(`◀ Trước`, `${PROJECT_PAGE_PREFIX}:${safePage - 1}`);
         }
         if (safePage < totalPages - 1) {
-            keyboard.text('Next ▶', `${PROJECT_PAGE_PREFIX}:${safePage + 1}`);
+            keyboard.text(`Tiếp ▶`, `${PROJECT_PAGE_PREFIX}:${safePage + 1}`);
         }
         keyboard.row();
     }

@@ -1,5 +1,4 @@
 import { InlineKeyboard } from 'grammy';
-import { t } from '../utils/i18n';
 import { SessionListItem } from '../services/chatSessionService';
 import { escapeHtml } from '../utils/telegramFormatter';
 
@@ -16,13 +15,13 @@ export function buildSessionPickerUI(
 ): { text: string; keyboard: InlineKeyboard } {
     if (sessions.length === 0) {
         return {
-            text: `<b>🔗 Join Session</b>\n\n${t('No sessions found in the Antigravity side panel.')}`,
+            text: `<b>🔗 Tham gia phiên</b>\n\nKhông tìm thấy phiên nào trong bảng điều khiển của Antigravity.`,
             keyboard: new InlineKeyboard(),
         };
     }
 
-    const text = `<b>🔗 Join Session</b>\n\n` +
-        t(`Select a session to join (${sessions.length} found)`);
+    const text = `<b>🔗 Tham gia phiên</b>\n\n` +
+        `Chọn một phiên để tham gia (tìm thấy ${sessions.length} phiên)`;
 
     const keyboard = new InlineKeyboard();
     const pageItems = sessions.slice(0, MAX_SELECT_OPTIONS);
