@@ -100,7 +100,7 @@ export class UserMessageDetector {
     private isRunning: boolean = false;
     /** Hash of the last detected message (for duplicate prevention) */
     private lastDetectedHash: string | null = null;
-    /** Set of echo hashes — messages sent by Remoat that should be ignored */
+    /** Set of echo hashes — messages sent by antigravity-telegram-remote that should be ignored */
     private readonly echoHashes = new Set<string>();
     /** Set of all previously detected message hashes (defense-in-depth dedup) */
     private readonly seenHashes = new Set<string>();
@@ -115,7 +115,7 @@ export class UserMessageDetector {
     }
 
     /**
-     * Register a message hash as an echo (sent by Remoat).
+     * Register a message hash as an echo (sent by antigravity-telegram-remote).
      * When this message is detected in the DOM, it will be skipped.
      */
     addEchoHash(text: string): void {
@@ -227,7 +227,7 @@ export class UserMessageDetector {
                     return;
                 }
 
-                // Skip if this is an echo (sent by Remoat)
+                // Skip if this is an echo (sent by antigravity-telegram-remote)
                 if (this.echoHashes.has(hash)) {
                     logger.debug(`[UserMessageDetector] Echo hash match, skipping: "${preview}..."`);
                     this.lastDetectedHash = hash;

@@ -1,138 +1,131 @@
 <p align="center" style="margin-bottom:0">
-  <img src="docs/images/owl-logo.svg" alt="Remoat owl" width="240" />
+  <img src="docs/images/owl-logo.svg" alt="antigravity-telegram-remote owl" width="240" />
 </p>
 <h1 align="center" style="margin-top:0">Antigravity Telegram Remote</h1>
 
 <p align="center">
-  <strong>Control your AI coding assistant from anywhere — right from Telegram.</strong>
+  <strong>Điều khiển trợ lý lập trình AI của bạn từ bất cứ đâu — ngay từ Telegram.</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/optimistengineer/Remoat/blob/main/LICENSE"><img src="https://img.shields.io/github/license/optimistengineer/Remoat?style=flat-square" alt="License" /></a>
+  <a href="https://github.com/optimistengineer/remoat/blob/main/LICENSE"><img src="https://img.shields.io/github/license/optimistengineer/remoat?style=flat-square" alt="License" /></a>
   <img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen?style=flat-square&logo=node.js" alt="Node.js" />
   <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey?style=flat-square" alt="Platform" />
 </p>
 
 ---
 
-Antigravity Telegram Remote is a **local Telegram bot** that lets you remotely operate [Antigravity](https://antigravity.dev) IDE on your PC — from your phone, tablet, or any device with Telegram.
+antigravity-telegram-remote là một **bot Telegram cục bộ** cho phép bạn điều khiển từ xa IDE [Antigravity](https://antigravity.dev) trên PC của bạn — từ điện thoại, máy tính bảng hoặc bất cứ thiết bị nào có Telegram.
 
-Type a natural-language instruction, attach a screenshot, or send a voice note. Antigravity Telegram Remote dispatches it to Antigravity via Chrome DevTools Protocol, monitors progress in real time, and streams results back to Telegram. Everything runs on your machine.
+Gõ một hướng dẫn bằng ngôn ngữ tự nhiên, đính kèm ảnh chụp màn hình hoặc gửi ghi âm giọng nói. antigravity-telegram-remote gửi nó đến Antigravity qua Chrome DevTools Protocol, giám sát tiến độ thực tế và phát lại kết quả cho Telegram. Mọi thứ chạy trên máy của bạn.
 
-## Table of Contents
+## Mục lục
 
-- [Quick Start](#quick-start)
-- [Features](#features)
-- [Advanced Setup](#advanced-setup)
-- [Commands](#commands)
-- [Troubleshooting](#troubleshooting)
-- [How It Works](#how-it-works)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
+- [Khởi động nhanh](#khởi-động-nhanh)
+- [Tính năng](#tính-năng)
+- [Cài đặt nâng cao](#cài-đặt-nâng-cao)
+- [Lệnh](#lệnh)
+- [Khắc phục sự cố](#khắc-phục-sự-cố)
+- [Cách hoạt động](#cách-hoạt-động)
+- [Cấu trúc dự án](#cấu-trúc-dự-án)
+- [Đóng góp](#đóng-góp)
+- [Giấy phép](#giấy-phép)
 
-## Quick Start
+## Khởi động nhanh
 
-### Prerequisites
+### Yêu cầu
 
-- [Node.js](https://nodejs.org/) 18 or higher
-- [Antigravity](https://antigravity.dev) installed on your machine
-- A [Telegram](https://telegram.org/) account
+- [Node.js](https://nodejs.org/) 18 trở lên
+- [Antigravity](https://antigravity.dev) được cài đặt trên máy của bạn
+- Tài khoản [Telegram](https://telegram.org/)
 
 <details>
-<summary>macOS: you'll also need Xcode Command Line Tools</summary>
+<summary>macOS: bạn cũng sẽ cần Xcode Command Line Tools</summary>
 
-Antigravity Telegram Remote uses `better-sqlite3`, a native C++ module that requires a compiler. If you don't have Xcode CLI tools installed, run:
+Antigravity Telegram Remote sử dụng `better-sqlite3`, một mô-đun C++ gốc yêu cầu trình biên dịch. Nếu bạn chưa cài đặt công cụ Xcode CLI, hãy chạy:
 
 ```bash
 xcode-select --install
 ```
 
-You can verify they're installed with `xcode-select -p`.
+Bạn có thể xác minh chúng được cài đặt bằng `xcode-select -p`.
 
 </details>
 
-### 1. Install Antigravity Telegram Remote
+### 1. Cài đặt Antigravity Telegram Remote
 
 ```bash
 npm install -g antigravity-telegram-remote
 ```
 
-Or with Homebrew (macOS/Linux):
-
-```bash
-brew tap optimistengineer/antigravity-telegram-remote
-brew install antigravity-telegram-remote
-```
-
-### 2. Run the setup wizard
+### 2. Chạy trình hướng dẫn cài đặt
 
 ```bash
 antigravity-telegram-remote setup
 ```
 
-The wizard walks you through:
+Trình hướng dẫn sẽ hướng dẫn bạn:
 
-- **Telegram Bot Token** — Create a bot via [@BotFather](https://t.me/BotFather) on Telegram (`/newbot`), then copy the token it gives you
-- **Allowed User IDs** — Only these Telegram users can control the bot. Message [@userinfobot](https://t.me/userinfobot) to get your ID
-- **Workspace Directory** — The parent directory where your coding projects live (e.g. `~/Code`)
+- **Token Bot Telegram** — Tạo bot qua [@BotFather](https://t.me/BotFather) trên Telegram (`/newbot`), sau đó sao chép token nó cấp cho bạn
+- **ID người dùng Telegram được phép** — Chỉ những người dùng Telegram này mới có thể điều khiển bot. Nhắn tin [@userinfobot](https://t.me/userinfobot) để lấy ID của bạn
+- **Thư mục Workspace** — Thư mục cha nơi các dự án lập trình của bạn sống (ví dụ: `~/Code`)
 
-### 3. Launch Antigravity with CDP enabled
+### 3. Khởi động Antigravity với CDP được bật
 
 ```bash
 antigravity-telegram-remote open
 ```
 
 > [!NOTE]
-> If Antigravity is already running, quit it first and relaunch with `antigravity-telegram-remote open` — it needs the CDP debug port to be enabled.
+> Nếu Antigravity đã đang chạy, hãy thoát trước rồi khởi động lại với `antigravity-telegram-remote open` — nó cần cổng gỡ lỗi CDP được bật.
 
-### 4. Start the Telegram bot (in a new terminal)
+### 4. Bắt đầu bot Telegram (trong một terminal mới)
 
 ```bash
 antigravity-telegram-remote start
 ```
 
-That's it. Open Telegram, find your bot, and start sending instructions.
+Đó là nó. Mở Telegram, tìm bot của bạn và bắt đầu gửi hướng dẫn.
 
 <details>
-<summary>Voice messages (optional): install the Whisper model</summary>
+<summary>Tin nhắn giọng nói (tùy chọn): cài đặt mô hình Whisper</summary>
 
 ```bash
 npx nodejs-whisper download
 ```
 
-This pulls `base.en` (~140 MB). Requires `cmake` (`brew install cmake` on macOS, `apt install cmake` on Linux).
+Điều này kéo `base.en` (~140 MB). Yêu cầu `cmake` (`brew install cmake` trên macOS, `apt install cmake` trên Linux).
 
 </details>
 
-> Having issues? Run `remoat doctor` to diagnose your setup.
+> Gặp sự cố? Chạy `antigravity-telegram-remote doctor` để chẩn đoán cài đặt của bạn.
 
-## Features
+## Tính năng
 
-**Remote control from anywhere** — Send natural-language prompts, images, or voice notes from your phone. Antigravity executes them on your PC with full local resources.
+**Điều khiển từ xa từ bất cứ đâu** — Gửi lời nhắc bằng ngôn ngữ tự nhiên, hình ảnh hoặc ghi âm giọng nói từ điện thoại của bạn. Antigravity thực thi chúng trên PC của bạn với đầy đủ tài nguyên cục bộ.
 
-**Project isolation via Telegram Topics** — Each project maps to a Telegram Forum Topic. All messages within a topic automatically use the correct project directory and session history — no manual context switching needed.
+**Cô lập dự án qua Topic Telegram** — Mỗi dự án được ánh xạ tới một Topic Diễn đàn Telegram. Tất cả tin nhắn trong một topic tự động sử dụng thư mục dự án chính xác và lịch sử phiên — không cần chuyển đổi ngữ cảnh thủ công.
 
-**Real-time progress streaming** — Long-running tasks report progress in phases (sending, thinking, complete) with a live process log and elapsed timer, streamed as Telegram messages.
+**Phát trực tiếp tiến độ thực tế** — Các tác vụ chạy dài báo cáo tiến độ theo giai đoạn (gửi, suy nghĩ, hoàn thành) với nhật ký quá trình trực tiếp và bộ hẹn giờ elapsed, được phát lại dưới dạng các tin nhắn Telegram.
 
-**Voice input** — Hold the mic button and speak. Antigravity Telegram Remote transcribes locally via [whisper.cpp](https://github.com/ggerganov/whisper.cpp) — no cloud APIs, no Telegram Premium required.
+**Đầu vào giọng nói** — Nhấn nút micro và nói. antigravity-telegram-remote phiên dịch cục bộ qua [whisper.cpp](https://github.com/ggerganov/whisper.cpp) — không có API đám mây, không cần Telegram Premium.
 
-**Approval routing** — When Antigravity asks for confirmation (file edits, plan decisions), the dialog surfaces in Telegram with inline action buttons. Or toggle `/autoaccept` to approve automatically.
+**Định tuyến phê duyệt** — Khi Antigravity yêu cầu xác nhận (chỉnh sửa tệp, quyết định kế hoạch), hộp thoại xuất hiện trong Telegram với các nút hành động nội tuyến. Hoặc bật `/autoaccept` để phê duyệt tự động.
 
-**Security by design** — Whitelist-based access control. Path traversal prevention. Credentials stored locally. No webhooks, no port exposure.
+**Bảo mật theo thiết kế** — Kiểm soát truy cập dựa trên danh sách trắng. Ngăn chặn duyệt qua đường dẫn. Thông tin đăng nhập lưu trữ cục bộ. Không có webhook, không có tiếp xúc cổng.
 
-## Advanced Setup
+## Cài đặt nâng cao
 
-### From source
+### Từ nguồn
 
 ```bash
-git clone https://github.com/optimistengineer/antigravity-telegram-remote.git
+git clone https://github.com/hongquandev/remoat.git
 cd antigravity-telegram-remote
 npm install
 cp .env.example .env
 ```
 
-Edit `.env` with your values:
+Chỉnh sửa `.env` với các giá trị của bạn:
 
 ```env
 TELEGRAM_BOT_TOKEN=your_bot_token_here
@@ -142,174 +135,174 @@ USE_TOPICS=true
 ```
 
 > [!TIP]
-> Alternatively, run `npm start -- setup` to use the interactive wizard instead of editing `.env` manually.
+> Ngoài ra, hãy chạy `npm start -- setup` để sử dụng trình hướng dẫn tương tác thay vì chỉnh sửa `.env` thủ công.
 
-Then start the bot:
-
-```bash
-npm run dev       # development mode with auto-reload
-# or
-npm start         # run from source
-```
-
-### Launching Antigravity with CDP
-
-Remoat connects to Antigravity via Chrome DevTools Protocol. Launch Antigravity with a debug port enabled:
+Sau đó bắt đầu bot:
 
 ```bash
-antigravity-telegram-remote open       # auto-selects an available port (9222, 9223, 9333, 9444, 9555, or 9666)
+npm run dev       # chế độ phát triển với tải lại tự động
+# hoặc
+npm start         # chạy từ nguồn
 ```
 
-From source, you can also use the bundled launcher scripts:
+### Khởi động Antigravity với CDP
 
-| Platform | Method |
+antigravity-telegram-remote kết nối với Antigravity qua Chrome DevTools Protocol. Khởi động Antigravity với cổng gỡ lỗi được bật:
+
+```bash
+antigravity-telegram-remote open       # tự động chọn cổng có sẵn (9222, 9223, 9333, 9444, 9555 hoặc 9666)
+```
+
+Từ nguồn, bạn cũng có thể sử dụng các tập lệnh khởi chạy được gói:
+
+| Nền tảng | Phương pháp |
 |----------|--------|
-| macOS    | Double-click `start_antigravity_mac.command` (run `chmod +x` first time) |
-| Windows  | Double-click `start_antigravity_win.bat` |
-| Linux    | Set `ANTIGRAVITY_PATH=/path/to/antigravity` in `.env`, then `antigravity-telegram-remote open` |
+| macOS    | Nhấp đôi `start_antigravity_mac.command` (chạy `chmod +x` lần đầu tiên) |
+| Windows  | Nhấp đôi `start_antigravity_win.bat` |
+| Linux    | Đặt `ANTIGRAVITY_PATH=/path/to/antigravity` trong `.env`, sau đó `antigravity-telegram-remote open` |
 
-> Launch Antigravity first, then start the bot. It connects automatically.
+> Khởi động Antigravity trước, sau đó bắt đầu bot. Nó kết nối tự động.
 
-### Forum Topics (optional)
+### Topic Diễn đàn (tùy chọn)
 
-For multi-project workflows, Antigravity Telegram Remote supports Telegram Forum Topics — each project gets its own topic thread.
+Đối với quy trình làm việc đa dự án, Antigravity Telegram Remote hỗ trợ Chủ đề Diễn đàn Telegram — mỗi dự án có chủ đề riêng.
 
-1. Create a Telegram supergroup and enable **Topics** in group settings
-2. Add your bot to the group with admin permissions
-3. Set `USE_TOPICS=true` in `.env` (this is the default)
+1. Tạo một nhóm siêu Telegram và bật **Chủ đề** trong cài đặt nhóm
+2. Thêm bot của bạn vào nhóm với quyền quản trị
+3. Đặt `USE_TOPICS=true` trong `.env` (đây là mặc định)
 
-For simpler setups, set `USE_TOPICS=false` and use the bot in a regular chat.
+Đối với cài đặt đơn giản hơn, đặt `USE_TOPICS=false` và sử dụng bot trong một chat thông thường.
 
-## Commands
+## Lệnh
 
 ### CLI
 
 ```
-antigravity-telegram-remote              auto-detect: runs setup if unconfigured, otherwise starts the bot
-antigravity-telegram-remote setup        interactive setup wizard
-antigravity-telegram-remote open         launch Antigravity with CDP port enabled
-antigravity-telegram-remote start        start the Telegram bot
-antigravity-telegram-remote doctor       diagnose configuration and connectivity issues
-antigravity-telegram-remote --verbose    show debug-level logs (CDP traffic, detector events)
-antigravity-telegram-remote --quiet      errors only
+antigravity-telegram-remote              tự động phát hiện: chạy cài đặt nếu chưa được cấu hình, nếu không hãy khởi động bot
+antigravity-telegram-remote setup        trình hướng dẫn cài đặt tương tác
+antigravity-telegram-remote open         khởi động Antigravity với cổng CDP được bật
+antigravity-telegram-remote start        bắt đầu bot Telegram
+antigravity-telegram-remote doctor       chẩn đoán vấn đề cấu hình và kết nối
+antigravity-telegram-remote --verbose    hiển thị nhật ký ở mức gỡ lỗi (lưu lượng CDP, sự kiện trình phát hiện)
+antigravity-telegram-remote --quiet      chỉ lỗi
 ```
 
 ### Telegram
 
-| Command | Description |
+| Lệnh | Mô tả |
 |---------|-------------|
-| `/project` | Browse and select a project (inline keyboard) |
-| `/new` | Start a new chat session in the current project |
-| `/chat` | Show current session info and list all sessions |
+| `/project` | Duyệt và chọn một dự án (bàn phím nội tuyến) |
+| `/new` | Bắt đầu phiên chat mới trong dự án hiện tại |
+| `/chat` | Hiển thị thông tin phiên hiện tại và liệt kê tất cả các phiên |
 | | |
-| `/model [name]` | Switch the LLM model (e.g. `gemini-2.5-pro`, `claude-opus-4-6`) |
-| `/mode` | Switch execution mode (`fast`, `plan`) |
-| `/stop` | Force-stop a running Antigravity task |
+| `/model [name]` | Chuyển mô hình LLM (ví dụ: `gemini-2.5-pro`, `claude-opus-4-6`) |
+| `/mode` | Chuyển chế độ thực thi (`fast`, `plan`) |
+| `/stop` | Buộc dừng tác vụ Antigravity đang chạy |
 | | |
-| `/template` | List registered prompt templates with execute buttons |
-| `/template_add <name> <prompt>` | Register a new prompt template |
-| `/template_delete <name>` | Delete a template |
+| `/template` | Liệt kê các mẫu lời nhắc đã đăng ký với các nút thực thi |
+| `/template_add <name> <prompt>` | Đăng ký một mẫu lời nhắc mới |
+| `/template_delete <name>` | Xóa một mẫu |
 | | |
-| `/screenshot` | Capture and send Antigravity's current screen |
-| `/status` | Show connection status, active project, and current mode |
-| `/autoaccept` | Toggle auto-approval of file edit dialogs |
-| `/cleanup [days]` | Clean up inactive session topics (default: 7 days) |
-| `/help` | Show available commands |
+| `/screenshot` | Chụp và gửi màn hình Antigravity hiện tại |
+| `/status` | Hiển thị trạng thái kết nối, dự án hoạt động và chế độ hiện tại |
+| `/autoaccept` | Bật/tắt phê duyệt tự động các hộp thoại chỉnh sửa tệp |
+| `/cleanup [days]` | Làm sạch các topic phiên không hoạt động (mặc định: 7 ngày) |
+| `/help` | Hiển thị các lệnh có sẵn |
 
-### Natural Language
+### Ngôn ngữ tự nhiên
 
-Just type in any bound topic or direct chat:
+Chỉ cần gõ trong bất kỳ chủ đề ràng buộc nào hoặc chat trực tiếp:
 
-> _refactor the auth components — see the attached screenshot for the target layout_
+> _refactor các thành phần xác thực — xem ảnh chụp màn hình đính kèm cho bố cục mục tiêu_
 
-Or hold the mic button and speak — the voice note gets transcribed locally and sent as a prompt.
+Hoặc nhấn nút mic và nói — ghi âm giọng nói sẽ được phiên dịch cục bộ và gửi dưới dạng lời nhắc.
 
-## Troubleshooting
+## Khắc phục sự cố
 
-Run diagnostics first:
+Chạy chẩn đoán trước:
 
 ```bash
 antigravity-telegram-remote doctor
 ```
 
-This checks your config, Node.js version, Xcode tools (macOS), Antigravity installation, and CDP port connectivity.
+Điều này kiểm tra cấu hình của bạn, phiên bản Node.js, công cụ Xcode (macOS), cài đặt Antigravity và kết nối cổng CDP.
 
-**`npm install` fails with `gyp ERR!` on macOS** — Install Xcode Command Line Tools: `xcode-select --install`
+**`npm install` thất bại với `gyp ERR!` trên macOS** — Cài đặt Xcode Command Line Tools: `xcode-select --install`
 
-**`antigravity-telegram-remote open` can't find Antigravity** — The app must be in `/Applications`. If you installed it elsewhere, set `ANTIGRAVITY_PATH` in your `.env` file or environment:
+**`antigravity-telegram-remote open` không thể tìm thấy Antigravity** — Ứng dụng phải nằm trong `/Applications`. Nếu bạn cài đặt ở nơi khác, hãy đặt `ANTIGRAVITY_PATH` trong tệp `.env` hoặc môi trường của bạn:
 
 ```bash
 export ANTIGRAVITY_PATH=/path/to/Antigravity
 antigravity-telegram-remote open
 ```
 
-**Bot not responding to messages** — Make sure Antigravity is running with CDP enabled (`antigravity-telegram-remote open`) before starting the bot. The bot will warn you on startup if no CDP ports are responding, but it continues running and auto-connects once Antigravity is available.
+**Bot không phản hồi tin nhắn** — Hãy chắc chắn rằng Antigravity đang chạy với CDP được bật (`antigravity-telegram-remote open`) trước khi khởi động bot. Bot sẽ cảnh báo bạn khi khởi động nếu không có cổng CDP nào phản hồi, nhưng nó tiếp tục chạy và tự động kết nối một khi Antigravity khả dụng.
 
-**CDP connection lost** — If you restart Antigravity, the bot auto-reconnects. Sending any message also triggers reconnection.
+**Kết nối CDP bị mất** — Nếu bạn khởi động lại Antigravity, bot tự động kết nối lại. Gửi bất cứ tin nhắn nào cũng kích hoạt kết nối lại.
 
-**Verbose logging:**
+**Ghi nhật ký chi tiết:**
 
 ```bash
-antigravity-telegram-remote --verbose      # see CDP traffic, detector events, and internal state
+antigravity-telegram-remote --verbose      # xem lưu lượng CDP, sự kiện trình phát hiện và trạng thái nội bộ
 ```
 
-## How It Works
+## Cách hoạt động
 
 <p align="center">
   <a href="https://excalidraw.com/#json=a54sSDUatTXGCtJORO7GJ,muz3R_zi4nbj9RKuRAfbEA">
-    <img src="docs/images/architecture.svg" alt="Remoat architecture diagram" width="700" />
+    <img src="docs/images/architecture.svg" alt="antigravity-telegram-remote architecture diagram" width="700" />
   </a>
 </p>
 
-1. You send a message in Telegram
-2. Antigravity Telegram Remote authenticates it against your whitelist, resolves the project context, and injects the prompt into Antigravity via CDP
-3. A response monitor polls Antigravity's DOM at 2-second intervals, detecting progress phases, approval dialogs, errors, and completion
-4. Results stream back to Telegram as formatted messages
+1. Bạn gửi một tin nhắn trong Telegram
+2. antigravity-telegram-remote xác thực nó so với danh sách trắng của bạn, giải quyết ngữ cảnh dự án và tiêm lời nhắc vào Antigravity qua CDP
+3. Trình giám sát phản hồi thăm dò DOM của Antigravity ở các khoảng thời gian 2 giây, phát hiện giai đoạn tiến độ, hộp thoại phê duyệt, lỗi và hoàn thành
+4. Kết quả được phát lại cho Telegram dưới dạng các tin nhắn được định dạng
 
-The bot never exposes a port, never forwards traffic externally, and never stores your code anywhere but your local disk.
+Bot không bao giờ tiếp xúc với cổng, không bao giờ chuyển tiếp lưu lượng bên ngoài và không bao giờ lưu trữ mã của bạn ở bất cứ đâu ngoài ổ đĩa cục bộ của bạn.
 
-> For a deeper dive, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Click the diagram above for an [interactive version](https://excalidraw.com/#json=a54sSDUatTXGCtJORO7GJ,muz3R_zi4nbj9RKuRAfbEA).
+> Để tìm hiểu sâu hơn, hãy xem [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Nhấp vào sơ đồ ở trên để có [phiên bản tương tác](https://excalidraw.com/#json=a54sSDUatTXGCtJORO7GJ,muz3R_zi4nbj9RKuRAfbEA).
 
-## Project Structure
+## Cấu trúc dự án
 
 ```
 src/
-  bin/          CLI entry point (Commander subcommands)
-  bot/          grammy bot — event handling, command routing, callback queries
-  commands/     Telegram slash command handlers and message parser
-  services/     core business logic (CDP, response monitoring, detectors, sessions)
-  database/     SQLite repositories (sessions, workspace bindings, templates, schedules)
-  middleware/   auth (user ID whitelist) and input sanitization
-  ui/           Telegram InlineKeyboard builders
-  utils/        config, logging, formatting, i18n, path security, voice/image handling
-tests/          test files mirroring src/ structure
-docs/           architecture docs, DOM selector reference, diagrams
-locales/        i18n translations (en, ja)
+  bin/          điểm vào CLI (các lệnh con của Commander)
+  bot/          bot grammy — xử lý sự kiện, định tuyến lệnh, truy vấn gọi lại
+  commands/     trình xử lý lệnh slash Telegram và trình phân tích tin nhắn
+  services/     logic kinh doanh cốt lõi (CDP, giám sát phản hồi, trình phát hiện, phiên)
+  database/     kho lưu trữ SQLite (phiên, liên kết không gian làm việc, mẫu, lịch)
+  middleware/   xác thực (danh sách trắng ID người dùng) và làm sạch đầu vào
+  ui/           những người xây dựng InlineKeyboard Telegram
+  utils/        cấu hình, ghi nhật ký, định dạng, i18n, bảo mật đường dẫn, xử lý giọng nói/hình ảnh
+tests/          tệp thử nghiệm phản chiếu cấu trúc src/
+docs/           tài liệu kiến trúc, tham chiếu bộ chọn DOM, sơ đồ
+locales/        bản dịch i18n (en, ja, vi)
 ```
 
-## Contributing
+## Đóng góp
 
-Contributions are welcome — whether it's a bug fix, a new feature, documentation improvements, or test coverage.
+Các đóng góp được chào đón — dù là sửa lỗi, tính năng mới, cải tiến tài liệu hay phạm vi thử nghiệm.
 
 ```bash
-git clone https://github.com/optimistengineer/antigravity-telegram-remote.git
+git clone https://github.com/optimistengineer/remoat.git
 cd antigravity-telegram-remote
 npm install
-cp .env.example .env  # fill in your values
-npm run dev           # start with auto-reload
-npm test              # run the test suite
+cp .env.example .env  # điền vào các giá trị của bạn
+npm run dev           # bắt đầu với tải lại tự động
+npm test              # chạy bộ thử nghiệm
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide — code style, commit conventions, PR process, and project architecture.
+Xem [CONTRIBUTING.md](CONTRIBUTING.md) để biết hướng dẫn đầy đủ — kiểu mã, quy ước cam kết, quy trình PR và kiến trúc dự án.
 
-## Star History
+## Lịch sử sao
 
-[![Star History Chart](https://api.star-history.com/svg?repos=optimistengineer/antigravity-telegram-remote&type=date&legend=top-left)](https://www.star-history.com/#optimistengineer/antigravity-telegram-remote&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=optimistengineer/remoat&type=date&legend=top-left)](https://www.star-history.com/#optimistengineer/remoat&type=date&legend=top-left)
 
-## License
+## Giấy phép
 
 [MIT](LICENSE)
 
-## Acknowledgements
+## Lời cảm ơn
 
-Based on [LazyGravity](https://github.com/tokyoweb3/LazyGravity), a Discord bot for remotely controlling Antigravity via CDP. Antigravity Telegram Remote ports the core architecture to Telegram and adds features like Forum Topics, voice input, and structured DOM extraction.
+Dựa trên [Remoat](https://github.com/optimistengineer/remoat), bot Remote để điều khiển từ xa Antigravity qua CDP. Antigravity Telegram Remote chuyển kiến trúc cốt lõi sang Telegram và thêm các tính năng như Topic Diễn đàn, đầu vào giọng nói và trích xuất DOM được cấu trúc.

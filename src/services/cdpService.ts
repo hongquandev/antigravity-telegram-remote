@@ -274,7 +274,7 @@ export class CdpService extends EventEmitter {
 
         // Enable Runtime.addBinding for event-driven DOM monitoring
         try {
-            await this.call('Runtime.addBinding', { name: 'onRemoatDOMChange' });
+            await this.call('Runtime.addBinding', { name: 'onantigravity-telegram-remoteDOMChange' });
         } catch (err) {
             logger.warn('[CdpService] Runtime.addBinding failed (non-fatal):', err);
         }

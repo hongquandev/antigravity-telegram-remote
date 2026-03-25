@@ -23,7 +23,7 @@ ${C.cyan}           (O,O)${C.reset}
 ${C.cyan}           (   )${C.reset}
 ${C.cyan}           -"-"-${C.reset}
 
-     ${C.bold}~ Antigravity Telegram Remote Setup ~${C.reset}
+     ${C.bold}~ Cài đặt Antigravity Telegram Remote ~${C.reset}
 `;
 
 function isNonEmpty(value: string): boolean {
@@ -40,9 +40,9 @@ function parseAllowedUserIds(raw: string): string[] {
 
 function validateAllowedUserIds(raw: string): string | null {
     const ids = parseAllowedUserIds(raw);
-    if (ids.length === 0) return 'Please enter at least one user ID.';
+    if (ids.length === 0) return 'Vui lòng nhập ít nhất một ID người dùng.';
     const invalid = ids.find((id) => !isNumericString(id));
-    if (invalid) return `Invalid user ID: "${invalid}" — must be a numeric string.`;
+    if (invalid) return `ID người dùng không hợp lệ: "${invalid}" — phải là một chuỗi số.`;
     return null;
 }
 
@@ -112,7 +112,7 @@ function askSecret(rl: readline.Interface, prompt: string): Promise<string> {
 }
 
 function stepHeader(step: number, total: number, title: string): void {
-    console.log(`  ${C.cyan}[Step ${step}/${total}]${C.reset} ${C.bold}${title}${C.reset}`);
+    console.log(`  ${C.cyan}[Bước ${step}/${total}]${C.reset} ${C.bold}${title}${C.reset}`);
 }
 
 function hint(text: string): void {
@@ -136,18 +136,18 @@ interface SetupResult {
 async function promptToken(rl: readline.Interface): Promise<{ token: string; botName: string | null }> {
     while (true) {
         const token = await askSecret(rl, `  ${C.yellow}>${C.reset} `);
-        if (!isNonEmpty(token)) { errMsg('Token cannot be empty.'); continue; }
+        if (!isNonEmpty(token)) { errMsg('Token không được để trống.'); continue; }
         const trimmed = token.trim();
 
-        process.stdout.write(`  ${C.dim}Verifying token...${C.reset}`);
+        process.stdout.write(`  ${C.dim}Đang xác thực token...${C.reset}`);
         const botInfo = await verifyTelegramToken(trimmed);
 
         if (botInfo) {
-            process.stdout.write(`\r  ${C.green}Verified!${C.reset} Bot: ${C.bold}@${botInfo.username}${C.reset} (${botInfo.first_name})\n`);
+            process.stdout.write(`\r  ${C.green}Đã xác thực!${C.reset} Bot: ${C.bold}@${botInfo.username}${C.reset} (${botInfo.first_name})\n`);
             return { token: trimmed, botName: botInfo.username };
         }
 
-        process.stdout.write(`\r  ${C.yellow}Could not verify online${C.reset} — using token as-is.\n`);
+        process.stdout.write(`\r  ${C.yellow}Không thể xác thực trực tuyến${C.reset} — sử dụng token như hiện tại.\n`);
         return { token: trimmed, botName: null };
     }
 }
@@ -213,10 +213,10 @@ async function promptWorkspaceDir(): Promise<string> {
         const resolved = path.resolve(dir);
         if (fs.existsSync(resolved)) return resolved;
         const confirmRl = createInterface();
-        const answer = await ask(confirmRl, `  ${C.yellow}"${resolved}" does not exist. Create it? (y/n):${C.reset} `);
+        const answer = await ask(confirmRl, `  ${C.yellow}"${resolved}" không tồn tại. Tạo thư mục này? (y/n):${C.reset} `);
         confirmRl.close();
         if (answer.trim().toLowerCase() === 'y') { fs.mkdirSync(resolved, { recursive: true }); return resolved; }
-        errMsg('Please enter an existing directory.');
+        errMsg('Vui lòng nhập một thư mục hợp lệ.');
     }
 }
 
@@ -224,30 +224,30 @@ async function runSetupWizard(): Promise<SetupResult> {
     const rl = createInterface();
     try {
         console.log(SETUP_LOGO);
-        console.log(`  ${C.bold}Interactive setup — ${TOTAL_STEPS} steps${C.reset}\n`);
+        console.log(`  ${C.bold}Hướng dẫn cài đặt — ${TOTAL_STEPS} bước${C.reset}\n`);
 
         stepHeader(1, TOTAL_STEPS, 'Telegram Bot Token');
-        hint('1. Open Telegram and search for @BotFather');
-        hint('2. Send /newbot and follow the prompts to create a bot');
-        hint('3. Copy the bot token BotFather gives you');
+        hint('1. Mở Telegram và tìm kiếm @BotFather');
+        hint('2. Gửi lệnh /newbot và làm theo hướng dẫn để tạo bot mới');
+        hint('3. Sao chép mã bot token mà BotFather cung cấp cho bạn');
         hintBlank();
         const { token: telegramBotToken } = await promptToken(rl);
         console.log('');
 
-        stepHeader(2, TOTAL_STEPS, 'Allowed Telegram User IDs');
-        hint('Only these users can send commands to the bot.');
-        hint('1. Open Telegram and search for @userinfobot');
-        hint('2. Send any message — it replies with your numeric user ID');
-        hint('Multiple IDs: separate with commas (e.g. 123456,789012)');
+        stepHeader(2, TOTAL_STEPS, 'ID người dùng Telegram được phép');
+        hint('Chỉ những người dùng này mới có thể gửi lệnh cho bot.');
+        hint('1. Mở Telegram và tìm kiếm @userinfobot');
+        hint('2. Gửi bất kỳ tin nhắn nào — nó sẽ trả lời bằng ID người dùng (số) của bạn');
+        hint('Nhiều ID: phân tách bằng dấu phẩy (ví dụ: 123456,789012)');
         hintBlank();
         const allowedUserIds = await promptAllowedUserIds(rl);
         console.log('');
 
-        stepHeader(3, TOTAL_STEPS, 'Workspace Base Directory');
-        hint('The parent directory where your coding projects live.');
-        hint('Each subdirectory becomes a selectable project in Telegram via /project.');
-        hint('You can change this later in ~/.remoat/config.json or by re-running remoat setup.');
-        hint('Press Tab to autocomplete directory paths.');
+        stepHeader(3, TOTAL_STEPS, 'Thư mục gốc của Workspace');
+        hint('Thư mục cha chứa các dự án code của bạn.');
+        hint('Mỗi thư mục con sẽ trở thành một dự án có thể chọn trên Telegram qua lệnh /project.');
+        hint('Bạn có thể thay đổi mục này sau tại ~/.antigravity-telegram-remote/config.json hoặc chạy lại lệnh setup.');
+        hint('Nhấn Tab để tự động hoàn thành đường dẫn thư mục.');
         hintBlank();
         rl.close();
         const workspaceBaseDir = await promptWorkspaceDir();
@@ -270,12 +270,12 @@ export async function setupAction(): Promise<void> {
 
     const configPath = ConfigLoader.getConfigFilePath();
 
-    console.log(`  ${C.green}Setup complete!${C.reset}\n`);
-    console.log(`  ${C.dim}Saved to${C.reset} ${configPath}\n`);
-    console.log(`  ${C.cyan}Next steps:${C.reset}`);
-    console.log(`  ${C.bold}1.${C.reset} Open Antigravity with CDP enabled:`);
-    console.log(`     ${C.green}remoat open${C.reset}`);
-    console.log(`     ${C.dim}(auto-selects an available port from: ${CDP_PORTS.join(', ')})${C.reset}\n`);
-    console.log(`  ${C.bold}2.${C.reset} Run: ${C.green}remoat start${C.reset}\n`);
-    console.log(`  ${C.bold}3.${C.reset} Open Telegram and message your bot!\n`);
+    console.log(`  ${C.green}Cài đặt hoàn tất!${C.reset}\n`);
+    console.log(`  ${C.dim}Đã lưu tại${C.reset} ${configPath}\n`);
+    console.log(`  ${C.cyan}Các bước tiếp theo:${C.reset}`);
+    console.log(`  ${C.bold}1.${C.reset} Mở Antigravity với CDP được bật:`);
+    console.log(`     ${C.green}antigravity-telegram-remote open${C.reset}`);
+    console.log(`     ${C.dim}(tự động chọn một cổng khả dụng từ: ${CDP_PORTS.join(', ')})${C.reset}\n`);
+    console.log(`  ${C.bold}2.${C.reset} Chạy lệnh: ${C.green}antigravity-telegram-remote start${C.reset}\n`);
+    console.log(`  ${C.bold}3.${C.reset} Mở Telegram và gửi tin nhắn cho bot của bạn!\n`);
 }

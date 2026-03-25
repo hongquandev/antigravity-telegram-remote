@@ -139,7 +139,7 @@ export async function openAction(): Promise<void> {
         }
 
         console.log(`  ${C.green}${APP_NAME} opened on CDP port ${port}${C.reset}`);
-        console.log(`  ${C.dim}Run ${C.reset}${C.cyan}remoat start${C.reset}${C.dim} to connect the bot.${C.reset}\n`);
+        console.log(`  ${C.dim}Run ${C.reset}${C.cyan}antigravity-telegram-remote start${C.reset}${C.dim} to connect the bot.${C.reset}\n`);
     } catch (error) {
         const msg = error instanceof Error ? error.message : String(error);
         console.log(`  ${C.red}${msg}${C.reset}`);

@@ -23,7 +23,7 @@ export function printWelcome(): void {
     ].join('\n');
 
     const width = 50;
-    const borderTop    = `╭${'─'.repeat(width)}╮`;
+    const borderTop = `╭${'─'.repeat(width)}╮`;
     const borderBottom = `╰${'─'.repeat(width)}╯`;
     const pad = (s: string) => `│  ${s}${''.padEnd(width - visibleLength(s) - 4)}  │`;
     const empty = `│${''.padEnd(width)}│`;
@@ -43,7 +43,7 @@ export function printWelcome(): void {
         pad(`  ${C.bold}3.${C.reset} ${C.green}antigravity-telegram-remote start${C.reset}   ${C.dim}— start the bot${C.reset}`),
         empty,
         pad(`${C.dim}Troubleshoot: ${C.reset}${C.green}antigravity-telegram-remote doctor${C.reset}`),
-        pad(`${C.dim}GitHub: ${C.reset}${C.cyan}github.com/optimistengineer/antigravity-telegram-remote${C.reset}`),
+        pad(`${C.dim}GitHub: ${C.reset}${C.cyan}github.com/optimistengineer/remoat${C.reset}`),
         empty,
         borderBottom,
         '',

@@ -160,17 +160,108 @@ async function sendPromptToAntigravity(
     const enqueueResponse = createSerialTaskQueue('response', monitorTraceId);
     const enqueueActivity = createSerialTaskQueue('activity', monitorTraceId);
 
-    const sendMsg = async (text: string): Promise<number | null> => {
+    /** Helper to ensure all opened HTML tags are closed in order, and stray closing tags are removed. */
+    const balanceHtmlTags = (html: string): string => {
+        const tagRegex = /<\/?(\w+)(?:\s[^>]*)?\s*\/?>/g;
+        const openTags: string[] = [];
+        const parts: { type: 'text' | 'tag', content: string, tagName?: string, isStart?: boolean }[] = [];
+        let lastIdx = 0;
+        let match;
+
+        while ((match = tagRegex.exec(html)) !== null) {
+            // Push text before the tag
+            if (match.index > lastIdx) {
+                parts.push({ type: 'text', content: html.slice(lastIdx, match.index) });
+            }
+            const fullTag = match[0];
+            const tagName = match[1].toLowerCase();
+            const isStart = !fullTag.startsWith('</') && !fullTag.endsWith('/>');
+            const isSelfClosing = fullTag.endsWith('/>') || ['br', 'hr', 'img'].includes(tagName);
+
+            if (isSelfClosing) {
+                parts.push({ type: 'tag', content: fullTag });
+            } else if (isStart) {
+                openTags.push(tagName);
+                parts.push({ type: 'tag', content: fullTag, tagName, isStart: true });
+            } else {
+                // Closing tag
+                const idx = openTags.lastIndexOf(tagName);
+                if (idx !== -1) {
+                    // Match found: close all tags opened after this one (in reverse order)
+                    while (openTags.length > idx) {
+                        const popped = openTags.pop()!;
+                        parts.push({ type: 'tag', content: `</${popped}>`, tagName: popped, isStart: false });
+                    }
+                } else {
+                    // Stray closing tag: discard it
+                    logger.debug(`[balanceHtml] Disregarding stray tag: ${fullTag}`);
+                }
+            }
+            lastIdx = tagRegex.lastIndex;
+        }
+        if (lastIdx < html.length) {
+            parts.push({ type: 'text', content: html.slice(lastIdx) });
+        }
+
+        let result = parts.map(p => p.content).join('');
+        // Close remaining open tags
+        for (let i = openTags.length - 1; i >= 0; i--) {
+            result += `</${openTags[i]}>`;
+        }
+        return result;
+    };
+
+    /** Ultra-safe HTML stripper for emergency fallback. */
+    const stripHtml = (html: string): string => {
+        return html
+            .replace(/<\/?[^>]+>/g, '') // remove all tags
+            .replace(/&amp;/g, '&')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+    };
+
+    /** Send a message to the bot's current channel, with HTML error handling and auto-recovery. */
+    const sendMsg = async (text: string, keyboard?: InlineKeyboard): Promise<number | null> => {
+        const threadId = channel.threadId;
+
+        const options: any = {
+            parse_mode: 'HTML',
+            reply_markup: keyboard,
+            message_thread_id: threadId,
+        };
+
         try {
-            const truncated = text.length > TELEGRAM_MSG_LIMIT ? text.slice(0, TELEGRAM_MSG_LIMIT - 20) + '\n...(truncated)' : text;
-            const msg = await api.sendMessage(channel.chatId, truncated, {
-                parse_mode: 'HTML',
-                message_thread_id: channel.threadId,
-            });
+            // Attempt 1: Default HTML
+            const msg = await api.sendMessage(channel.chatId, text, options);
             return msg.message_id;
-        } catch (e) {
-            logger.error('[sendMsg] Failed:', e);
-            return null;
+        } catch (e: any) {
+            const desc = e?.description || e?.message || '';
+            logger.warn(`[sendMsg] HTML attempt 1 failed (${desc.slice(0, 100)}). Attempting auto-fix...`);
+
+            // Attempt 2: Balanced tags
+            const fixed = balanceHtmlTags(text);
+            try {
+                const msg = await api.sendMessage(channel.chatId, fixed, options);
+                return msg.message_id;
+            } catch (e2: any) {
+                const desc2 = e2?.description || e2?.message || '';
+                logger.error(`[sendMsg] HTML attempt 2 (fixed) failed: ${desc2.slice(0, 100)}. Falling back to plain text.`);
+                
+                // Attempt 3: Plain text fallback
+                try {
+                    const plain = stripHtml(text);
+                    const msg = await api.sendMessage(channel.chatId, plain, {
+                        ...options,
+                        parse_mode: undefined,
+                    });
+                    return msg.message_id ?? null;
+                } catch (e3: any) {
+                    logger.error('[sendMsg] Critical failure in fallback:', e3?.message || e3);
+                    return null;
+                }
+            }
         }
     };
 
@@ -336,9 +427,13 @@ async function sendPromptToAntigravity(
         const body = normalized
             ? (isAlreadyHtml ? normalized : formatForTelegram(normalized))
             : t('Generating...');
-        const truncated = (!skipTruncation && body.length > LIVE_RESPONSE_MAX_LEN)
-            ? '...(beginning truncated)\n' + body.slice(-LIVE_RESPONSE_MAX_LEN + 30)
-            : body;
+        
+        let truncated = body;
+        if (!skipTruncation && body.length > LIVE_RESPONSE_MAX_LEN) {
+            const rawSlice = body.slice(-LIVE_RESPONSE_MAX_LEN + 30);
+            truncated = '...(beginning truncated)\n' + (isAlreadyHtml || body.includes('<') ? balanceHtmlTags(rawSlice) : rawSlice);
+        }
+
         const titleLine = title ? `<b>${escapeHtml(title)}</b>\n\n` : '';
         const footerLine = footer ? `\n\n<i>${escapeHtml(footer)}</i>` : '';
         return `${titleLine}${truncated}${footerLine}`;
@@ -768,6 +863,9 @@ export const startBot = async (cliLogLevel?: LogLevel) => {
     logger.setLogLevel(cliLogLevel ?? config.logLevel);
 
     const dbPath = process.env.NODE_ENV === 'test' ? ':memory:' : ConfigLoader.getDefaultDbPath();
+    if (dbPath !== ':memory:') {
+        ConfigLoader.ensureConfigDirExists();
+    }
     const db = new Database(dbPath);
     db.pragma('journal_mode = WAL');
     const modeService = new ModeService();
@@ -830,6 +928,7 @@ export const startBot = async (cliLogLevel?: LogLevel) => {
     // Auth middleware
     bot.use(async (ctx, next) => {
         const userId = String(ctx.from?.id ?? '');
+        logger.debug(`[Auth] User attempt: ${userId} (Allowed: ${config.allowedUserIds.join(', ')})`);
         if (!config.allowedUserIds.includes(userId)) {
             if (ctx.callbackQuery) {
                 await ctx.answerCallbackQuery({ text: 'You do not have permission.' });
@@ -881,7 +980,7 @@ export const startBot = async (cliLogLevel?: LogLevel) => {
     // /start command
     bot.command('start', async (ctx) => {
         await replyHtml(ctx,
-            `<b>Remoat Online</b>\n\n` +
+            `<b>antigravity-telegram-remote Online</b>\n\n` +
             `Use /help for available commands.\n` +
             `Send any text message to forward it to Antigravity.`
         );
@@ -890,7 +989,7 @@ export const startBot = async (cliLogLevel?: LogLevel) => {
     // /help command
     bot.command('help', async (ctx) => {
         await replyHtml(ctx,
-            `<b>📖 Remoat Commands</b>\n\n` +
+            `<b>📖 antigravity-telegram-remote Commands</b>\n\n` +
             `<b>💬 Chat</b>\n` +
             `/new — Start a new chat session\n` +
             `/chat — Show current session info\n\n` +
@@ -1797,7 +1896,7 @@ export const startBot = async (cliLogLevel?: LogLevel) => {
         });
     });
 
-    logger.info('Starting Remoat Telegram bot...');
+    logger.info('Starting antigravity-telegram-remote Telegram bot...');
 
     // Graceful shutdown: close database on exit
     const closeDb = () => { try { db.close(); } catch { /* ignore */ } };
@@ -1814,21 +1913,21 @@ export const startBot = async (cliLogLevel?: LogLevel) => {
             logger.info(`Bot started as @${botInfo.username} | extractionMode=${config.extractionMode}`);
             try {
                 await bot.api.setMyCommands([
-                    { command: 'start', description: 'Welcome message' },
-                    { command: 'help', description: 'Show all commands' },
-                    { command: 'project', description: 'Select a project' },
-                    { command: 'new', description: 'Start a new chat session' },
-                    { command: 'chat', description: 'Current session info' },
-                    { command: 'mode', description: 'Change execution mode' },
-                    { command: 'model', description: 'Change LLM model' },
-                    { command: 'stop', description: 'Interrupt active generation' },
-                    { command: 'screenshot', description: 'Capture Antigravity screen' },
-                    { command: 'template', description: 'Show prompt templates' },
-                    { command: 'template_add', description: 'Register a template' },
-                    { command: 'template_delete', description: 'Delete a template' },
-                    { command: 'autoaccept', description: 'Toggle auto-approve mode' },
-                    { command: 'status', description: 'Bot status overview' },
-                    { command: 'ping', description: 'Check latency' },
+                    { command: 'start', description: 'Tin nhắn chào mừng' },
+                    { command: 'help', description: 'Hiển thị tất cả lệnh' },
+                    { command: 'project', description: 'Chọn một dự án' },
+                    { command: 'new', description: 'Bắt đầu phiên chat mới' },
+                    { command: 'chat', description: 'Thông tin phiên hiện tại' },
+                    { command: 'mode', description: 'Thay đổi chế độ thực thi' },
+                    { command: 'model', description: 'Thay đổi mô hình LLM' },
+                    { command: 'stop', description: 'Dừng việc tạo kết quả' },
+                    { command: 'screenshot', description: 'Chụp màn hình Antigravity' },
+                    { command: 'template', description: 'Hiển thị mẫu lời nhắc' },
+                    { command: 'template_add', description: 'Đăng ký một mẫu' },
+                    { command: 'template_delete', description: 'Xóa một mẫu' },
+                    { command: 'autoaccept', description: 'Bật/tắt chế độ tự động duyệt' },
+                    { command: 'status', description: 'Tổng quan trạng thái bot' },
+                    { command: 'ping', description: 'Kiểm tra độ trễ' },
                 ]);
                 logger.info('Telegram command menu registered successfully');
             } catch (err) {

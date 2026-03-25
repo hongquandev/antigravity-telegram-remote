@@ -49,7 +49,7 @@ export async function ensureAntigravityRunning(): Promise<void> {
     logger.warn('  Antigravity CDP ports are not responding');
     logger.warn('');
     logger.warn('  Launch Antigravity with CDP enabled:');
-    logger.warn('    remoat open');
+    logger.warn('    antigravity-telegram-remote open');
     logger.warn('');
     logger.warn('  Or manually:');
     logger.warn(`    ${getAntigravityCdpHint(9222)}`);

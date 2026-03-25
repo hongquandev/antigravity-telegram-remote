@@ -611,22 +611,22 @@ export const RESPONSE_SELECTORS = {
     DOM_OBSERVER: `(() => {
         const panel = document.querySelector('.antigravity-agent-side-panel') || document.body;
         // Clean up previous observer if exists
-        if (window._remoatObserver) window._remoatObserver.disconnect();
+        if (window._antigravity-telegram-remoteObserver) window._antigravity-telegram-remoteObserver.disconnect();
         
         let debounceTimer;
         const notify = () => {
-            if (typeof window.onRemoatDOMChange === 'function') {
-                window.onRemoatDOMChange('changed');
+            if (typeof window.onantigravity-telegram-remoteDOMChange === 'function') {
+                window.onantigravity-telegram-remoteDOMChange('changed');
             }
         };
 
-        window._remoatObserver = new MutationObserver((mutations) => {
+        window._antigravity-telegram-remoteObserver = new MutationObserver((mutations) => {
             clearTimeout(debounceTimer);
             // Throttle to 100ms to avoid flooding CDP during rapid streaming
             debounceTimer = setTimeout(notify, 100);
         });
 
-        window._remoatObserver.observe(panel, {
+        window._antigravity-telegram-remoteObserver.observe(panel, {
             childList: true,
             subtree: true,
             characterData: true
@@ -720,7 +720,7 @@ export class ResponseMonitor {
 
         // Listen for push notifications from the browser
         this.bindingListener = (params: any) => {
-            if (params.name === 'onRemoatDOMChange' && this.isRunning) {
+            if (params.name === 'onantigravity-telegram-remoteDOMChange' && this.isRunning) {
                 this.handleDomChangedEvent();
             }
         };

@@ -3,11 +3,11 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 
-const CONFIG_DIR = '.remoat';
+const CONFIG_DIR = '.antigravity-telegram-remote';
 export const UPDATE_CHECK_FILE = 'update-check.json';
 export const COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
 
-const REGISTRY_URL = 'https://registry.npmjs.org/remoat/latest';
+const REGISTRY_URL = 'https://registry.npmjs.org/antigravity-telegram-remote/latest';
 const REQUEST_TIMEOUT_MS = 5000;
 
 interface UpdateCheckCache {
@@ -109,7 +109,7 @@ export async function checkForUpdates(currentVersion: string): Promise<void> {
 
         if (compareSemver(currentVersion, latest) < 0) {
             console.info(
-                `\n  Update available: ${currentVersion} \u2192 ${latest} \u2014 run \x1b[36mnpm i -g remoat\x1b[0m\n`,
+                `\n  Update available: ${currentVersion} \u2192 ${latest} \u2014 run \x1b[36mnpm i -g antigravity-telegram-remote\x1b[0m\n`,
             );
         }
     } catch {

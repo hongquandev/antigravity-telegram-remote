@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+console.log(`[DEBUG] CLI Start: cwd=${process.cwd()}`);
 import * as fs from 'fs';
 import * as path from 'path';
 import { Command } from 'commander';
@@ -12,10 +13,10 @@ import { printWelcome } from './welcome';
 
 const program = new Command()
     .name('antigravity-telegram-remote')
-    .description('Control your AI coding assistant from Telegram')
+    .description('Điều khiển trợ lý lập trình AI của bạn từ Telegram')
     .version(version)
-    .option('--verbose', 'Show debug-level logs')
-    .option('--quiet', 'Only show errors');
+    .option('--verbose', 'Hiển thị nhật ký cấp độ debug')
+    .option('--quiet', 'Chỉ hiển thị lỗi');
 
 // Default action: no subcommand → start or setup
 program.action(async () => {
@@ -32,22 +33,22 @@ program.action(async () => {
 
 program
     .command('start')
-    .description('Start the Telegram bot')
+    .description('Bắt đầu bot Telegram')
     .action((_opts, cmd) => startAction(cmd.parent.opts(), cmd.parent));
 
 program
     .command('doctor')
-    .description('Check environment and dependencies')
+    .description('Kiểm tra môi trường và các phụ thuộc')
     .action(doctorAction);
 
 program
     .command('setup')
-    .description('Interactive setup wizard')
+    .description('Trình hướng dẫn thiết lập tương tác')
     .action(setupAction);
 
 program
     .command('open')
-    .description('Open Antigravity with CDP enabled (auto-selects available port)')
+    .description('Mở Antigravity với CDP được bật (tự động chọn cổng khả dụng)')
     .action(openAction);
 
 program.parse();

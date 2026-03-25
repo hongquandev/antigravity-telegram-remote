@@ -28,7 +28,7 @@ What happened instead? Include error messages or screenshots if relevant.
 
 - **OS:** (e.g. macOS 15, Ubuntu 24.04, Windows 11)
 - **Node.js:** (output of `node --version`)
-- **Remoat:** (output of `remoat --version`)
+- **antigravity-telegram-remote:** (output of `antigravity-telegram-remote --version`)
 - **Antigravity:** (version number)
 
 ## Logs
@@ -37,7 +37,7 @@ What happened instead? Include error messages or screenshots if relevant.
 <summary>Verbose output</summary>
 
 ```
-Paste the output of `remoat --verbose` here
+Paste the output of `antigravity-telegram-remote --verbose` here
 ```
 
 </details>

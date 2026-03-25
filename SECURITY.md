@@ -2,9 +2,9 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Remoat, please report it responsibly.
+If you discover a security vulnerability in antigravity-telegram-remote, please report it responsibly.
 
-**Report via:** [GitHub Security Advisories](https://github.com/optimistengineer/Remoat/security/advisories/new) (preferred) or open a [private issue](https://github.com/optimistengineer/Remoat/issues)
+**Report via:** [GitHub Security Advisories](https://github.com/optimistengineer/remoat/security/advisories/new) (preferred) or open a [private issue](https://github.com/optimistengineer/remoat/issues)
 
 Include:
 
@@ -17,7 +17,7 @@ We'll acknowledge receipt within 48 hours and aim to release a fix within 7 days
 
 ## Security Model
 
-Remoat is designed to run on your local machine with no external attack surface.
+antigravity-telegram-remote is designed to run on your local machine with no external attack surface.
 
 ### Network
 
@@ -27,11 +27,11 @@ Remoat is designed to run on your local machine with no external attack surface.
 ### Authentication
 
 - **Whitelist-based access control.** Every incoming Telegram message and callback query is checked against `ALLOWED_USER_IDS` before any processing occurs. Unauthorized messages are silently dropped.
-- **No multi-tenancy.** Remoat is a single-user tool. The whitelist is an additional safety layer, not a shared-access mechanism.
+- **No multi-tenancy.** antigravity-telegram-remote is a single-user tool. The whitelist is an additional safety layer, not a shared-access mechanism.
 
 ### Credential Storage
 
-- Bot tokens and user IDs are stored in a local `.env` file (or `~/.remoat/config.json` when installed via npm).
+- Bot tokens and user IDs are stored in a local `.env` file (or `~/.antigravity-telegram-remote/config.json` when installed via npm).
 - The `.env` file is excluded from version control via `.gitignore`.
 - We recommend setting restrictive file permissions: `chmod 600 .env`.
 
@@ -42,7 +42,7 @@ Remoat is designed to run on your local machine with no external attack surface.
 
 ### Data Handling
 
-- **No telemetry.** Remoat does not collect, transmit, or store analytics data.
+- **No telemetry.** antigravity-telegram-remote does not collect, transmit, or store analytics data.
 - **No cloud storage.** Session data, workspace bindings, and templates are stored in a local SQLite database (`antigravity.db`).
 - **Voice transcription is local.** Voice messages are transcribed on-device via whisper.cpp. Audio is never sent to external services.
 
@@ -57,6 +57,6 @@ Remoat is designed to run on your local machine with no external attack surface.
 
 1. Keep `ALLOWED_USER_IDS` limited to your own Telegram account
 2. Set file permissions on `.env`: `chmod 600 .env`
-3. Don't share your bot token — if compromised, revoke it via [@BotFather](https://t.me/BotFather) and run `remoat setup` again
-4. Run `remoat doctor` periodically to verify your configuration
-5. Keep Remoat and its dependencies up to date
+3. Don't share your bot token — if compromised, revoke it via [@BotFather](https://t.me/BotFather) and run `antigravity-telegram-remote setup` again
+4. Run `antigravity-telegram-remote doctor` periodically to verify your configuration
+5. Keep antigravity-telegram-remote and its dependencies up to date

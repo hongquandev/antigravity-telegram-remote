@@ -21,8 +21,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 - Streaming code block freeze — `</code></pre>` now emitted correctly for language-annotated blocks, including emergency close
 - `/cleanup` callback data now encodes the days parameter (previously deleted all sessions regardless of age)
 - CDP workspace name regex fix (`\\s` → `\s`)
-- `remoat open` on Windows no longer hangs (replaced blocking `execFile` with `spawn` + `detach`)
-- `remoat doctor` now checks `config.json` in addition to `.env` for required variables
+- `antigravity-telegram-remote open` on Windows no longer hangs (replaced blocking `execFile` with `spawn` + `detach`)
+- `antigravity-telegram-remote doctor` now checks `config.json` in addition to `.env` for required variables
 - Session title verification is now case-insensitive (fixes false failures on `/chat`)
 - CDP error objects wrapped in `Error` instances so downstream `.message` checks work
 - `updateCheckService` now applies its timeout to `https.get` (previously could hang forever)
@@ -35,9 +35,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 - CLI default action returns async promises for proper error handling
 
 ### Added
-- Homebrew tap install (`brew tap optimistengineer/remoat && brew install remoat`)
+- Homebrew tap install (`brew tap optimistengineer/remoat && brew install antigravity-telegram-remote`)
 - MIT LICENSE file
-- Published to npm as `remoat@0.2.0`
+- Published to npm as `antigravity-telegram-remote@0.2.0`
 
 ### Changed
 - README: added Homebrew install option, removed failing CI/npm badges, fixed model name examples
@@ -59,8 +59,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 - `/autoaccept` command for toggling auto-approval of file edit dialogs
 - `/cleanup` command for pruning inactive session topics
 - `/status` command with connection state, active project, and mode info
-- `remoat doctor` with colored output and expanded environment checks
-- Invite link auto-generation during `remoat setup`
+- `antigravity-telegram-remote doctor` with colored output and expanded environment checks
+- Invite link auto-generation during `antigravity-telegram-remote setup`
 - Startup dashboard with system info on bot launch
 - i18n support (English and Japanese)
 
@@ -95,6 +95,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 - Message chunking for responses exceeding Telegram's 4096-char limit
 - macOS and Windows launcher scripts for Antigravity with CDP
 
-[0.2.1]: https://github.com/optimistengineer/Remoat/compare/v0.2.0...v0.2.1
-[0.2.0]: https://github.com/optimistengineer/Remoat/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/optimistengineer/Remoat/releases/tag/v0.1.0
+[0.2.1]: https://github.com/optimistengineer/remoat/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/optimistengineer/remoat/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/optimistengineer/remoat/releases/tag/v0.1.0

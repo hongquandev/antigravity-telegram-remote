@@ -156,7 +156,7 @@ body > div.xxx > div.yyy > div.zzz
 
 ## Usage in This Project
 
-In Remoat, DOM selectors are defined in `RESPONSE_SELECTORS` (`src/services/responseMonitor.ts`) and various detector files. When adding or modifying selectors:
+In antigravity-telegram-remote, DOM selectors are defined in `RESPONSE_SELECTORS` (`src/services/responseMonitor.ts`) and various detector files. When adding or modifying selectors:
 
 1. Investigate the DOM structure using the steps above
 2. Verify selector behavior in Console

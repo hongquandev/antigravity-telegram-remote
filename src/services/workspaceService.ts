@@ -26,6 +26,7 @@ export class WorkspaceService {
      */
     public scanWorkspaces(): string[] {
         this.ensureBaseDir();
+        console.log(`[DEBUG] Scanning workspaces in: ${this.baseDir}`);
 
         try {
             const entries = fs.readdirSync(this.baseDir, { withFileTypes: true });

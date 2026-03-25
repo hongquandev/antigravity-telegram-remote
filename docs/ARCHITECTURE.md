@@ -63,7 +63,7 @@ src/commands/chatCommandHandler.ts          — /new, /chat commands
 Instructions and results are linked through Telegram's reply chain and SQLite state.
 
 - **Metadata in SQLite:** Message IDs and workspace context are stored in SQLite, allowing reply-based follow-up to restore the full project context.
-- **Reply-based continuation:** When a user replies to a bot message, Remoat loads the associated workspace/session context and forwards the follow-up to Antigravity.
+- **Reply-based continuation:** When a user replies to a bot message, antigravity-telegram-remote loads the associated workspace/session context and forwards the follow-up to Antigravity.
 
 ## 5. Scheduled Tasks
 - Backend implementation using `node-cron` with `ScheduleService` and `ScheduleRepository`.
@@ -72,7 +72,7 @@ Instructions and results are linked through Telegram's reply chain and SQLite st
 - Telegram `/schedule` command integration is planned.
 
 ## 6. Real-Time Progress Updates
-- Remoat monitors Antigravity's output via CDP DOM polling.
+- antigravity-telegram-remote monitors Antigravity's output via CDP DOM polling.
 - Throttled message sending (every 3-5 seconds) avoids Telegram API rate limits.
 - Progress is sent as `<pre>` code blocks; final output uses full HTML formatting.
 

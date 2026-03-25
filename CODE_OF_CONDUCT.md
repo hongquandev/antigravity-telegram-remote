@@ -2,7 +2,7 @@
 
 ## Our Pledge
 
-We as members, contributors, and maintainers pledge to make participation in the Remoat project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
+We as members, contributors, and maintainers pledge to make participation in the antigravity-telegram-remote project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
 ## Our Standards
 
@@ -34,7 +34,7 @@ This Code of Conduct applies within all project spaces — GitHub issues, pull r
 
 ## Reporting
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project maintainers via [GitHub Issues](https://github.com/optimistengineer/Remoat/issues).
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project maintainers via [GitHub Issues](https://github.com/optimistengineer/remoat/issues).
 
 All complaints will be reviewed and investigated and will result in a response that is deemed necessary and appropriate to the circumstances.
 

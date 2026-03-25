@@ -11,7 +11,7 @@ Thanks for your interest in contributing. This guide covers everything you need 
 ## Getting Started
 
 ```bash
-git clone https://github.com/optimistengineer/antigravity-telegram-remote.git
+git clone https://github.com/optimistengineer/remoat.git
 cd antigravity-telegram-remote
 npm install
 cp .env.example .env
@@ -125,12 +125,12 @@ npx jest tests/services/cdpService.test.ts
 
 ## Finding Work
 
-- Check [open issues](https://github.com/optimistengineer/antigravity-telegram-remote/issues) — look for `good first issue` labels
-- Browse the [Discussions](https://github.com/optimistengineer/antigravity-telegram-remote/discussions) for ideas and questions
+- Check [open issues](https://github.com/optimistengineer/remoat/issues) — look for `good first issue` labels
+- Browse the [Discussions](https://github.com/optimistengineer/remoat/discussions) for ideas and questions
 
 ## Reporting Bugs
 
-Use the [bug report template](https://github.com/optimistengineer/antigravity-telegram-remote/issues/new?template=bug_report.md). Include:
+Use the [bug report template](https://github.com/optimistengineer/remoat/issues/new?template=bug_report.md). Include:
 
 - Steps to reproduce
 - Expected vs actual behavior
