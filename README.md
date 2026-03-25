@@ -140,7 +140,7 @@ Phát hành dưới giấy phép [MIT](LICENSE).
 
 ## 🙏 Lời cảm ơn
 
-Dự án này được khởi đầu và thừa hưởng kiến trúc cốt lõi từ project **[optimistengineer/ANTIRLM:main](https://github.com/optimistengineer/ANTIRLM)**. 
+Dự án này được khởi đầu và thừa hưởng kiến trúc cốt lõi từ project **[optimistengineer/remoat](https://github.com/optimistengineer/remoat)**. 
 
 Chúng tôi xin gửi lời cảm ơn chân thành đến đội ngũ tác giả ban đầu. Từ nền tảng vững chắc đó, phiên bản này đã được **Quan Nguyen - TNM** nghiên cứu, audit và nâng cấp toàn diện:
 - Chuyển đổi sang cơ chế **Event-Driven (MutationObserver)** để đạt hiệu năng vượt trội.
