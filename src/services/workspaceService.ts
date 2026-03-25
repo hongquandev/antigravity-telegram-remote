@@ -27,11 +27,24 @@ export class WorkspaceService {
     public scanWorkspaces(): string[] {
         this.ensureBaseDir();
 
-        const entries = fs.readdirSync(this.baseDir, { withFileTypes: true });
-        return entries
-            .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
-            .map((entry) => entry.name)
-            .sort();
+        try {
+            const entries = fs.readdirSync(this.baseDir, { withFileTypes: true });
+            const workspaces = entries
+                .filter((entry) => {
+                    try {
+                        // Double-check it's actually a directory
+                        return entry.isDirectory() && !entry.name.startsWith('.');
+                    } catch {
+                        return false;
+                    }
+                })
+                .map((entry) => entry.name)
+                .sort();
+            return workspaces;
+        } catch (error) {
+            console.error(`[WorkspaceService] Failed to scan workspaces in ${this.baseDir}:`, error);
+            return [];
+        }
     }
 
     /**

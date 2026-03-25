@@ -1,11 +1,11 @@
 # Architecture & Core Design
 
 ## 1. System Overview
-Remoat runs entirely on the user's local PC with no external server. It communicates with Telegram's Bot API over HTTPS and controls Antigravity via CDP (Chrome DevTools Protocol).
+Antigravity Telegram Remote runs entirely on the user's local PC with no external server. It communicates with Telegram's Bot API over HTTPS and controls Antigravity via CDP (Chrome DevTools Protocol).
 
 ```mermaid
 graph TD
-    A["📱 Telegram App"] -->|HTTPS Bot API| B["🐾 Remoat"]
+    A["📱 Telegram App"] -->|HTTPS Bot API| B["🐾 Antigravity Telegram Remote"]
     B -->|Bot API Replies| A
 
     subgraph Local["🏠 Your Machine"]

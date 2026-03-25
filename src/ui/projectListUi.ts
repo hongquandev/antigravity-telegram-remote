@@ -5,7 +5,7 @@ import { escapeHtml } from '../utils/telegramFormatter';
 export const PROJECT_SELECT_ID = 'project_select';
 export const WORKSPACE_SELECT_ID = 'workspace_select';
 export const PROJECT_PAGE_PREFIX = 'project_page';
-export const ITEMS_PER_PAGE = 10;
+export const ITEMS_PER_PAGE = 100;
 
 export function parseProjectPageId(customId: string): number {
     if (!customId.startsWith(`${PROJECT_PAGE_PREFIX}:`)) return NaN;

@@ -23,7 +23,7 @@ ${C.cyan}           (O,O)${C.reset}
 ${C.cyan}           (   )${C.reset}
 ${C.cyan}           -"-"-${C.reset}
 
-     ${C.bold}~ Remoat Setup (Telegram) ~${C.reset}
+     ${C.bold}~ Antigravity Telegram Remote Setup ~${C.reset}
 `;
 
 function isNonEmpty(value: string): boolean {

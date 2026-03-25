@@ -1,15 +1,28 @@
 /**
  * Helper to resolve the correct Antigravity CLI executable path based on the operating system
  * and environment variables.
- * 
+ *
  * Precedence:
  * 1. process.env.ANTIGRAVITY_PATH (Explicit override)
  * 2. OS-specific default paths (Mac: /Applications/..., Windows: %LOCALAPPDATA%\..., Linux: 'antigravity')
+ *
+ * SECURITY: Validates that ANTIGRAVITY_PATH is a file to prevent command injection
  */
 export function getAntigravityCliPath(): string {
     // Allow user to set explicit path via ANTIGRAVITY_PATH (especially useful for Linux AppImages)
     if (process.env.ANTIGRAVITY_PATH) {
-        return process.env.ANTIGRAVITY_PATH;
+        const path = process.env.ANTIGRAVITY_PATH;
+        // SECURITY: Validate that the path exists and is a file
+        try {
+            const fs = require('fs');
+            const stat = fs.statSync(path);
+            if (!stat.isFile()) {
+                throw new Error(`ANTIGRAVITY_PATH must be a file, got: ${path}`);
+            }
+            return path;
+        } catch (err: any) {
+            throw new Error(`ANTIGRAVITY_PATH validation failed: ${err.message}`);
+        }
     }
 
     if (process.platform === 'darwin') {

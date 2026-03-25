@@ -11,7 +11,7 @@ import { ConfigLoader } from '../utils/configLoader';
 import { printWelcome } from './welcome';
 
 const program = new Command()
-    .name('remoat')
+    .name('antigravity-telegram-remote')
     .description('Control your AI coding assistant from Telegram')
     .version(version)
     .option('--verbose', 'Show debug-level logs')

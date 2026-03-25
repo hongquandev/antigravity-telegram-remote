@@ -1083,6 +1083,7 @@ export const startBot = async (cliLogLevel?: LogLevel) => {
     // /project command
     bot.command('project', async (ctx) => {
         const workspaces = workspaceService.scanWorkspaces();
+        logger.debug(`[/project] Found ${workspaces.length} workspace(s):`, workspaces);
         const { text, keyboard } = buildProjectListUI(workspaces, 0);
         await replyHtml(ctx, text, keyboard);
     });

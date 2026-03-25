@@ -1,7 +1,7 @@
 <p align="center" style="margin-bottom:0">
   <img src="docs/images/owl-logo.svg" alt="Remoat owl" width="240" />
 </p>
-<h1 align="center" style="margin-top:0">Remoat</h1>
+<h1 align="center" style="margin-top:0">Antigravity Telegram Remote</h1>
 
 <p align="center">
   <strong>Control your AI coding assistant from anywhere — right from Telegram.</strong>
@@ -15,9 +15,9 @@
 
 ---
 
-Remoat is a **local Telegram bot** that lets you remotely operate [Antigravity](https://antigravity.dev) IDE on your PC — from your phone, tablet, or any device with Telegram.
+Antigravity Telegram Remote is a **local Telegram bot** that lets you remotely operate [Antigravity](https://antigravity.dev) IDE on your PC — from your phone, tablet, or any device with Telegram.
 
-Type a natural-language instruction, attach a screenshot, or send a voice note. Remoat dispatches it to Antigravity via Chrome DevTools Protocol, monitors progress in real time, and streams results back to Telegram. Everything runs on your machine.
+Type a natural-language instruction, attach a screenshot, or send a voice note. Antigravity Telegram Remote dispatches it to Antigravity via Chrome DevTools Protocol, monitors progress in real time, and streams results back to Telegram. Everything runs on your machine.
 
 ## Table of Contents
 
@@ -42,7 +42,7 @@ Type a natural-language instruction, attach a screenshot, or send a voice note. 
 <details>
 <summary>macOS: you'll also need Xcode Command Line Tools</summary>
 
-Remoat uses `better-sqlite3`, a native C++ module that requires a compiler. If you don't have Xcode CLI tools installed, run:
+Antigravity Telegram Remote uses `better-sqlite3`, a native C++ module that requires a compiler. If you don't have Xcode CLI tools installed, run:
 
 ```bash
 xcode-select --install
@@ -52,23 +52,23 @@ You can verify they're installed with `xcode-select -p`.
 
 </details>
 
-### 1. Install Remoat
+### 1. Install Antigravity Telegram Remote
 
 ```bash
-npm install -g remoat
+npm install -g antigravity-telegram-remote
 ```
 
 Or with Homebrew (macOS/Linux):
 
 ```bash
-brew tap optimistengineer/remoat
-brew install remoat
+brew tap optimistengineer/antigravity-telegram-remote
+brew install antigravity-telegram-remote
 ```
 
 ### 2. Run the setup wizard
 
 ```bash
-remoat setup
+antigravity-telegram-remote setup
 ```
 
 The wizard walks you through:
@@ -80,16 +80,16 @@ The wizard walks you through:
 ### 3. Launch Antigravity with CDP enabled
 
 ```bash
-remoat open
+antigravity-telegram-remote open
 ```
 
 > [!NOTE]
-> If Antigravity is already running, quit it first and relaunch with `remoat open` — it needs the CDP debug port to be enabled.
+> If Antigravity is already running, quit it first and relaunch with `antigravity-telegram-remote open` — it needs the CDP debug port to be enabled.
 
 ### 4. Start the Telegram bot (in a new terminal)
 
 ```bash
-remoat start
+antigravity-telegram-remote start
 ```
 
 That's it. Open Telegram, find your bot, and start sending instructions.
@@ -115,7 +115,7 @@ This pulls `base.en` (~140 MB). Requires `cmake` (`brew install cmake` on macOS,
 
 **Real-time progress streaming** — Long-running tasks report progress in phases (sending, thinking, complete) with a live process log and elapsed timer, streamed as Telegram messages.
 
-**Voice input** — Hold the mic button and speak. Remoat transcribes locally via [whisper.cpp](https://github.com/ggerganov/whisper.cpp) — no cloud APIs, no Telegram Premium required.
+**Voice input** — Hold the mic button and speak. Antigravity Telegram Remote transcribes locally via [whisper.cpp](https://github.com/ggerganov/whisper.cpp) — no cloud APIs, no Telegram Premium required.
 
 **Approval routing** — When Antigravity asks for confirmation (file edits, plan decisions), the dialog surfaces in Telegram with inline action buttons. Or toggle `/autoaccept` to approve automatically.
 
@@ -126,8 +126,8 @@ This pulls `base.en` (~140 MB). Requires `cmake` (`brew install cmake` on macOS,
 ### From source
 
 ```bash
-git clone https://github.com/optimistengineer/Remoat.git
-cd Remoat
+git clone https://github.com/optimistengineer/antigravity-telegram-remote.git
+cd antigravity-telegram-remote
 npm install
 cp .env.example .env
 ```
@@ -157,7 +157,7 @@ npm start         # run from source
 Remoat connects to Antigravity via Chrome DevTools Protocol. Launch Antigravity with a debug port enabled:
 
 ```bash
-remoat open       # auto-selects an available port (9222, 9223, 9333, 9444, 9555, or 9666)
+antigravity-telegram-remote open       # auto-selects an available port (9222, 9223, 9333, 9444, 9555, or 9666)
 ```
 
 From source, you can also use the bundled launcher scripts:
@@ -166,13 +166,13 @@ From source, you can also use the bundled launcher scripts:
 |----------|--------|
 | macOS    | Double-click `start_antigravity_mac.command` (run `chmod +x` first time) |
 | Windows  | Double-click `start_antigravity_win.bat` |
-| Linux    | Set `ANTIGRAVITY_PATH=/path/to/antigravity` in `.env`, then `remoat open` |
+| Linux    | Set `ANTIGRAVITY_PATH=/path/to/antigravity` in `.env`, then `antigravity-telegram-remote open` |
 
 > Launch Antigravity first, then start the bot. It connects automatically.
 
 ### Forum Topics (optional)
 
-For multi-project workflows, Remoat supports Telegram Forum Topics — each project gets its own topic thread.
+For multi-project workflows, Antigravity Telegram Remote supports Telegram Forum Topics — each project gets its own topic thread.
 
 1. Create a Telegram supergroup and enable **Topics** in group settings
 2. Add your bot to the group with admin permissions
@@ -185,13 +185,13 @@ For simpler setups, set `USE_TOPICS=false` and use the bot in a regular chat.
 ### CLI
 
 ```
-remoat              auto-detect: runs setup if unconfigured, otherwise starts the bot
-remoat setup        interactive setup wizard
-remoat open         launch Antigravity with CDP port enabled
-remoat start        start the Telegram bot
-remoat doctor       diagnose configuration and connectivity issues
-remoat --verbose    show debug-level logs (CDP traffic, detector events)
-remoat --quiet      errors only
+antigravity-telegram-remote              auto-detect: runs setup if unconfigured, otherwise starts the bot
+antigravity-telegram-remote setup        interactive setup wizard
+antigravity-telegram-remote open         launch Antigravity with CDP port enabled
+antigravity-telegram-remote start        start the Telegram bot
+antigravity-telegram-remote doctor       diagnose configuration and connectivity issues
+antigravity-telegram-remote --verbose    show debug-level logs (CDP traffic, detector events)
+antigravity-telegram-remote --quiet      errors only
 ```
 
 ### Telegram
@@ -229,28 +229,28 @@ Or hold the mic button and speak — the voice note gets transcribed locally and
 Run diagnostics first:
 
 ```bash
-remoat doctor
+antigravity-telegram-remote doctor
 ```
 
 This checks your config, Node.js version, Xcode tools (macOS), Antigravity installation, and CDP port connectivity.
 
 **`npm install` fails with `gyp ERR!` on macOS** — Install Xcode Command Line Tools: `xcode-select --install`
 
-**`remoat open` can't find Antigravity** — The app must be in `/Applications`. If you installed it elsewhere, set `ANTIGRAVITY_PATH` in your `.env` file or environment:
+**`antigravity-telegram-remote open` can't find Antigravity** — The app must be in `/Applications`. If you installed it elsewhere, set `ANTIGRAVITY_PATH` in your `.env` file or environment:
 
 ```bash
 export ANTIGRAVITY_PATH=/path/to/Antigravity
-remoat open
+antigravity-telegram-remote open
 ```
 
-**Bot not responding to messages** — Make sure Antigravity is running with CDP enabled (`remoat open`) before starting the bot. The bot will warn you on startup if no CDP ports are responding, but it continues running and auto-connects once Antigravity is available.
+**Bot not responding to messages** — Make sure Antigravity is running with CDP enabled (`antigravity-telegram-remote open`) before starting the bot. The bot will warn you on startup if no CDP ports are responding, but it continues running and auto-connects once Antigravity is available.
 
 **CDP connection lost** — If you restart Antigravity, the bot auto-reconnects. Sending any message also triggers reconnection.
 
 **Verbose logging:**
 
 ```bash
-remoat --verbose      # see CDP traffic, detector events, and internal state
+antigravity-telegram-remote --verbose      # see CDP traffic, detector events, and internal state
 ```
 
 ## How It Works
@@ -262,7 +262,7 @@ remoat --verbose      # see CDP traffic, detector events, and internal state
 </p>
 
 1. You send a message in Telegram
-2. Remoat authenticates it against your whitelist, resolves the project context, and injects the prompt into Antigravity via CDP
+2. Antigravity Telegram Remote authenticates it against your whitelist, resolves the project context, and injects the prompt into Antigravity via CDP
 3. A response monitor polls Antigravity's DOM at 2-second intervals, detecting progress phases, approval dialogs, errors, and completion
 4. Results stream back to Telegram as formatted messages
 
@@ -292,8 +292,8 @@ locales/        i18n translations (en, ja)
 Contributions are welcome — whether it's a bug fix, a new feature, documentation improvements, or test coverage.
 
 ```bash
-git clone https://github.com/optimistengineer/Remoat.git
-cd Remoat
+git clone https://github.com/optimistengineer/antigravity-telegram-remote.git
+cd antigravity-telegram-remote
 npm install
 cp .env.example .env  # fill in your values
 npm run dev           # start with auto-reload
@@ -304,7 +304,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide — code style, commit
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=optimistengineer/remoat&type=date&legend=top-left)](https://www.star-history.com/#optimistengineer/remoat&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=optimistengineer/antigravity-telegram-remote&type=date&legend=top-left)](https://www.star-history.com/#optimistengineer/antigravity-telegram-remote&type=date&legend=top-left)
 
 ## License
 
@@ -312,4 +312,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide — code style, commit
 
 ## Acknowledgements
 
-Based on [LazyGravity](https://github.com/tokyoweb3/LazyGravity), a Discord bot for remotely controlling Antigravity via CDP. Remoat ports the core architecture to Telegram and adds features like Forum Topics, voice input, and structured DOM extraction.
+Based on [LazyGravity](https://github.com/tokyoweb3/LazyGravity), a Discord bot for remotely controlling Antigravity via CDP. Antigravity Telegram Remote ports the core architecture to Telegram and adds features like Forum Topics, voice input, and structured DOM extraction.

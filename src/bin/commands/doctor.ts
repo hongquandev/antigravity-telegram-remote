@@ -64,7 +64,7 @@ function checkRequiredEnvVars(): { name: string; set: boolean }[] {
 }
 
 export async function doctorAction(): Promise<void> {
-    console.log(`\n${COLORS.cyan}remoat doctor${COLORS.reset}\n`);
+    console.log(`\n${COLORS.cyan}antigravity-telegram-remote doctor${COLORS.reset}\n`);
     let allOk = true;
 
     // 1. Config directory check
@@ -73,7 +73,7 @@ export async function doctorAction(): Promise<void> {
         ok(`Config directory exists: ${configDir}`);
     } else {
         warn(`Config directory not found: ${configDir}`);
-        hint('Run: remoat setup  (optional if using .env)');
+        hint('Run: antigravity-telegram-remote setup  (optional if using .env)');
     }
 
     // 2. Config file check
@@ -162,7 +162,7 @@ export async function doctorAction(): Promise<void> {
     }
     if (!cdpOk) {
         fail('No CDP ports responding');
-        hint(`Run: remoat open`);
+        hint(`Run: antigravity-telegram-remote open`);
         hint(`Or manually: ${getAntigravityCdpHint(9222)}`);
         allOk = false;
     }

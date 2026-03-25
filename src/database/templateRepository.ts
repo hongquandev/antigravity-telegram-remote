@@ -108,22 +108,16 @@ export class TemplateRepository {
 
     /**
      * Partially update by template name
+     * SECURITY: Uses hardcoded SQL patterns to prevent SQL injection
      */
     public updateByName(name: string, input: UpdateTemplateInput): boolean {
-        const sets: string[] = [];
-        const values: any[] = [];
-
         if (input.prompt !== undefined) {
-            sets.push('prompt = ?');
-            values.push(input.prompt);
+            const stmt = this.db.prepare('UPDATE templates SET prompt = ? WHERE name = ?');
+            const result = stmt.run(input.prompt, name);
+            return result.changes > 0;
         }
 
-        if (sets.length === 0) return false;
-
-        values.push(name);
-        const sql = `UPDATE templates SET ${sets.join(', ')} WHERE name = ?`;
-        const result = this.db.prepare(sql).run(...values);
-        return result.changes > 0;
+        return false;
     }
 
     private mapRow(row: any): TemplateRecord {

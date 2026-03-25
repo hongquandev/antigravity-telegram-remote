@@ -2,9 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## What is Remoat
+## What is Antigravity Telegram Remote
 
-Remoat is a local Telegram bot (grammy) that remotely operates Antigravity (an AI coding assistant) via Chrome DevTools Protocol (CDP). No external server — runs entirely on the user's PC. Users control Antigravity from their smartphone through Telegram.
+Antigravity Telegram Remote is a local Telegram bot (grammy) that remotely operates Antigravity (an AI coding assistant) via Chrome DevTools Protocol (CDP). No external server — runs entirely on the user's PC. Users control Antigravity from their smartphone through Telegram.
 
 ## Commands
 
@@ -47,7 +47,7 @@ Three-layer design: **CLI → Bot → Services/DB**
 - **TypeScript strict mode**, target ES2022, CommonJS modules
 - **Path alias**: `@/` maps to `src/` in jest.config.js `moduleNameMapper` only (for tests). Source code uses relative imports (`./`, `../`)
 - **Data flow**: Telegram long-polling (no webhooks) → auth middleware → command routing → CDP injection into Antigravity → DOM polling for responses → chunked/streamed back to Telegram (max 4096 chars/message)
-- **Config**: `.env` file or `~/.config/remoat/config.json` (see `src/utils/configLoader.ts`). Key env vars:
+- **Config**: `.env` file or `~/.config/antigravity-telegram-remote/config.json` (see `src/utils/configLoader.ts`). Key env vars:
   - `TELEGRAM_BOT_TOKEN`, `ALLOWED_USER_IDS` (required)
   - `WORKSPACE_BASE_DIR` — projects parent directory
   - `USE_TOPICS` — Telegram Forum Topics (default: true)

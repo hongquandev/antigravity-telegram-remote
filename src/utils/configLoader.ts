@@ -7,7 +7,7 @@ import type { LogLevel } from './logger';
 
 dotenv.config({ quiet: true });
 
-const CONFIG_DIR_NAME = '.remoat';
+const CONFIG_DIR_NAME = '.antigravity-telegram-remote';
 const CONFIG_FILE_NAME = 'config.json';
 const DEFAULT_DB_NAME = 'antigravity.db';
 
@@ -103,10 +103,12 @@ function resolveAllowedUserIds(persisted: PersistedConfig): string[] {
         return envValue
             .split(',')
             .map((id) => id.trim())
-            .filter((id) => id.length > 0);
+            // SECURITY: Validate that user IDs are numeric (Telegram user IDs are numeric)
+            .filter((id) => /^\d+$/.test(id) && id.length > 0);
     }
     if (persisted.allowedUserIds && persisted.allowedUserIds.length > 0) {
-        return [...persisted.allowedUserIds];
+        // SECURITY: Also validate persisted IDs
+        return persisted.allowedUserIds.filter((id) => /^\d+$/.test(id));
     }
     return [];
 }

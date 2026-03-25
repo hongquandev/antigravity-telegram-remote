@@ -4,5 +4,5 @@ export const LOGO = `
            (   )
            -"-"-
 
-     ~ Booting... Remoat ~
+     ~ Booting... Antigravity Telegram Remote ~
 `;

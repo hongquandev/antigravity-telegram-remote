@@ -735,9 +735,12 @@ export class CdpService extends EventEmitter {
 
     private async runCommand(command: string, args: string[]): Promise<void> {
         await new Promise<void>((resolve, reject) => {
+            // SECURITY: Never use shell=true to prevent command injection attacks
+            // Properly quoted arguments are passed without shell interpretation
             const child = spawn(command, args, {
                 stdio: 'ignore',
-                shell: process.platform === 'win32',
+                shell: false,
+                detached: true,
             });
 
             child.once('error', (error) => {
@@ -1134,7 +1137,7 @@ export class CdpService extends EventEmitter {
         });
 
         const notifyScript = `(() => {
-            const input = document.querySelector('${selector}');
+            const input = document.querySelector(${JSON.stringify(selector)});
             if (!input) return { ok: false, error: 'Image input not found' };
             input.removeAttribute('data-agclaw-upload-token');
             return { ok: true };
@@ -1161,10 +1164,19 @@ export class CdpService extends EventEmitter {
      *
      * Using CDP Input API instead of DOM manipulation ensures reliable
      * delivery to Cascade panel's React/framework event handlers.
+     *
+     * SECURITY NOTE: User input is sent directly to the LLM. Be aware of prompt injection risks.
+     * Log all LLM prompts for audit trails.
      */
     async injectMessage(text: string): Promise<InjectResult> {
         if (!this.isConnectedFlag || !this.ws) {
             throw new Error('Not connected to CDP. Call connect() first.');
+        }
+
+        // Log LLM prompt for audit trail (security: detect prompt injection attempts)
+        logger.debug(`[CDP] Injecting message to LLM (${text.length} chars)`);
+        if (text.length > 0 && text.length < 500) {
+            logger.debug(`[CDP] Message preview: ${text.substring(0, 100)}`);
         }
 
         const focusResult = await this.focusChatInput();

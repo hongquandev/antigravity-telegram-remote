@@ -1,4 +1,4 @@
-# Contributing to Remoat
+# Contributing to Antigravity Telegram Remote
 
 Thanks for your interest in contributing. This guide covers everything you need to get started.
 
@@ -11,8 +11,8 @@ Thanks for your interest in contributing. This guide covers everything you need 
 ## Getting Started
 
 ```bash
-git clone https://github.com/optimistengineer/Remoat.git
-cd Remoat
+git clone https://github.com/optimistengineer/antigravity-telegram-remote.git
+cd antigravity-telegram-remote
 npm install
 cp .env.example .env
 ```
@@ -125,17 +125,17 @@ npx jest tests/services/cdpService.test.ts
 
 ## Finding Work
 
-- Check [open issues](https://github.com/optimistengineer/Remoat/issues) — look for `good first issue` labels
-- Browse the [Discussions](https://github.com/optimistengineer/Remoat/discussions) for ideas and questions
+- Check [open issues](https://github.com/optimistengineer/antigravity-telegram-remote/issues) — look for `good first issue` labels
+- Browse the [Discussions](https://github.com/optimistengineer/antigravity-telegram-remote/discussions) for ideas and questions
 
 ## Reporting Bugs
 
-Use the [bug report template](https://github.com/optimistengineer/Remoat/issues/new?template=bug_report.md). Include:
+Use the [bug report template](https://github.com/optimistengineer/antigravity-telegram-remote/issues/new?template=bug_report.md). Include:
 
 - Steps to reproduce
 - Expected vs actual behavior
 - Environment details (OS, Node version, Antigravity version)
-- Relevant logs (`remoat --verbose` output)
+- Relevant logs (`antigravity-telegram-remote --verbose` output)
 
 ## License
 

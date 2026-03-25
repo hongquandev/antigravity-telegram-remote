@@ -1,10 +1,10 @@
 {
-  "name": "remoat",
+  "name": "antigravity-telegram-remote",
   "version": "0.2.10",
   "description": "Control Antigravity from anywhere — a local Telegram Bot that lets you remotely operate Antigravity on your home PC from your smartphone.",
   "main": "dist/index.js",
   "bin": {
-    "remoat": "dist/bin/cli.js"
+    "antigravity-telegram-remote": "dist/bin/cli.js"
   },
   "files": [
     "dist/",
@@ -44,16 +44,16 @@
     "automation",
     "grammy"
   ],
-  "author": "Remoat Contributors",
+  "author": "Antigravity Telegram Remote Contributors",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/optimistengineer/Remoat.git"
+    "url": "git+https://github.com/optimistengineer/antigravity-telegram-remote.git"
   },
   "bugs": {
-    "url": "https://github.com/optimistengineer/Remoat/issues"
+    "url": "https://github.com/optimistengineer/antigravity-telegram-remote/issues"
   },
-  "homepage": "https://github.com/optimistengineer/Remoat#readme",
+  "homepage": "https://github.com/optimistengineer/antigravity-telegram-remote#readme",
   "dependencies": {
     "better-sqlite3": "^12.6.2",
     "commander": "^14.0.3",
