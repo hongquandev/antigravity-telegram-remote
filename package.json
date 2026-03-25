@@ -48,12 +48,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hongquandev/remoat.git"
+    "url": "git+https://github.com/hongquandev/antigravity-telegram-remote.git"
   },
   "bugs": {
-    "url": "https://github.com/hongquandev/remoat/issues"
+    "url": "https://github.com/hongquandev/antigravity-telegram-remote/issues"
   },
-  "homepage": "https://github.com/hongquandev/remoat#readme",
+  "homepage": "https://github.com/hongquandev/antigravity-telegram-remote#readme",
   "dependencies": {
     "better-sqlite3": "^12.6.2",
     "commander": "^14.0.3",
