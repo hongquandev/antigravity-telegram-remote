@@ -64,7 +64,7 @@ antigravity-telegram-remote setup
 Trình hướng dẫn sẽ hướng dẫn bạn:
 
 - **Token Bot Telegram** — Tạo bot qua [@BotFather](https://t.me/BotFather) trên Telegram (`/newbot`), sau đó sao chép token nó cấp cho bạn
-- **ID người dùng Telegram được phép** — Chỉ những người dùng Telegram này mới có thể điều khiển bot. Nhắn tin [@userinfobot](https://t.me/userinfobot) để lấy ID của bạn
+- **ID người dùng Telegram được phép** — Chỉ những người dùng Telegram này mới có thể điều khiển bot. Nhắn tin [@raw_data_bot](https://t.me/@raw_data_bot) để lấy ID của bạn
 - **Thư mục Workspace** — Thư mục cha nơi các dự án lập trình của bạn sống (ví dụ: `~/Code`)
 
 ### 3. Khởi động Antigravity với CDP được bật
