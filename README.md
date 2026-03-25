@@ -1,4 +1,4 @@
-# 🚀 Antirlm (Antigravity Telegram Remote)
+# 🚀 ANTIRLM (Antigravity Telegram Remote)
 
 <p align="center">
   <pre>
@@ -22,16 +22,16 @@
 
 ---
 
-**Antirlm** (Antigravity-Telegram-Remote) là một **Telegram Bot cục bộ** mạnh mẽ, cho phép bạn điều khiển từ xa IDE [Antigravity](https://antigravity.dev) trên PC — từ điện thoại, máy tính bảng hoặc bất cứ thiết bị nào có Telegram.
+**ANTIRLM** (Antigravity-Telegram-Remote) là một **Telegram Bot cục bộ** mạnh mẽ, cho phép bạn điều khiển từ xa IDE [Antigravity](https://antigravity.dev) trên PC — từ điện thoại, máy tính bảng hoặc bất cứ thiết bị nào có Telegram.
 
-Chỉ cần gõ hướng dẫn bằng ngôn ngữ tự nhiên, đính kèm ảnh chụp màn hình hoặc gửi ghi âm giọng nói. Antirlm sẽ chuyển tiếp đến Antigravity qua Chrome DevTools Protocol (CDP), giám sát tiến trình thực tế theo thời gian thực và phản hồi kết quả trực tiếp về Telegram. **Tất cả dữ liệu và mã nguồn đều nằm an toàn trên máy của bạn.**
+Chỉ cần gõ hướng dẫn bằng ngôn ngữ tự nhiên, đính kèm ảnh chụp màn hình hoặc gửi ghi âm giọng nói. ANTIRLM sẽ chuyển tiếp đến Antigravity qua Chrome DevTools Protocol (CDP), giám sát tiến trình thực tế theo thời gian thực và phản hồi kết quả trực tiếp về Telegram. **Tất cả dữ liệu và mã nguồn đều nằm an toàn trên máy của bạn.**
 
 ## 🌟 Tính năng nổi bật
 
 *   **🕹️ Điều khiển từ xa 24/7:** Gửi lời nhắc (prompt), hình ảnh hoặc voice message từ bất cứ đâu. Antigravity sẽ thực thi trên PC của bạn với đầy đủ tài nguyên cục bộ.
 *   **📂 Quản lý dự án thông minh:** Mỗi dự án được ánh xạ tới một **Telegram Forum Topic**. Mọi tin nhắn trong topic tự động đồng bộ ngữ cảnh dự án và lịch sử phiên làm việc.
 *   **⏱️ Theo dõi tiến độ trực tiếp:** Tác vụ chạy dài sẽ báo cáo trạng thái theo từng giai đoạn (Suy nghĩ, Chỉnh sửa file, Chạy lệnh...) với bộ đếm thời gian thực.
-*   **🎙️ Hỗ trợ Giọng nói (Local Whisper):** Ghi âm và gửi. Antirlm dịch giọng nói ngay trên máy bạn qua [whisper.cpp](https://github.com/ggerganov/whisper.cpp) — không cần API đám mây, bảo mật tuyệt đối.
+*   **🎙️ Hỗ trợ Giọng nói (Local Whisper):** Ghi âm và gửi. ANTIRLM dịch giọng nói ngay trên máy bạn qua [whisper.cpp](https://github.com/ggerganov/whisper.cpp) — không cần API đám mây, bảo mật tuyệt đối.
 *   **✅ Phê duyệt từ xa:** Khi Antigravity yêu cầu xác nhận (sửa file, kế hoạch...), bạn sẽ nhận được thông báo kèm nút bấm ngay trong Telegram. Hoặc dùng `/autoaccept` để bot tự phê duyệt.
 *   **⚡ Tối ưu Event-Driven:** Sử dụng `MutationObserver` và `CDP Binding` để phát hiện thay đổi DOM tức thì (<100ms). Tin nhắn Telegram được cập nhật mượt mà và tiết kiệm tài nguyên CPU vượt trội.
 *   **🛡️ Bảo mật nâng cao (Security Audited):** Đã kiểm định và vá các lỗ hổng Path Traversal bằng giải thuật `realpath` (chống bypass qua symlinks). Toàn bộ dữ liệu nằm cục bộ, không có nguy cơ lộ lọt mã nguồn.
@@ -59,7 +59,7 @@ antigravity-telegram-remote setup
 ```
 
 ### 3. Khởi động Antigravity với CDP
-Antirlm cần Antigravity chạy ở chế độ debug (CDP):
+ANTIRLM cần Antigravity chạy ở chế độ debug (CDP):
 ```bash
 antigravity-telegram-remote open
 ```
@@ -140,7 +140,7 @@ Phát hành dưới giấy phép [MIT](LICENSE).
 
 ## 🙏 Lời cảm ơn
 
-Dự án này được khởi đầu và thừa hưởng kiến trúc cốt lõi từ project **[optimistengineer/Antirlm:main](https://github.com/optimistengineer/Antirlm)**. 
+Dự án này được khởi đầu và thừa hưởng kiến trúc cốt lõi từ project **[optimistengineer/ANTIRLM:main](https://github.com/optimistengineer/ANTIRLM)**. 
 
 Chúng tôi xin gửi lời cảm ơn chân thành đến đội ngũ tác giả ban đầu. Từ nền tảng vững chắc đó, phiên bản này đã được **Quan Nguyen - TNM** nghiên cứu, audit và nâng cấp toàn diện:
 - Chuyển đổi sang cơ chế **Event-Driven (MutationObserver)** để đạt hiệu năng vượt trội.
