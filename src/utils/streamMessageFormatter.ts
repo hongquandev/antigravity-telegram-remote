@@ -3,14 +3,14 @@
  * Consolidates into a single line if Fast and Plan models are the same.
  */
 export function buildModeModelLines(modeName: string, fastModel: string, planModel: string): string[] {
-    const lines = [`Current Mode: ${modeName}`];
+    const lines = [`Chế độ hiện tại: ${modeName}`];
     if (fastModel.trim().toLowerCase() === planModel.trim().toLowerCase()) {
-        lines.push(`Model: ${fastModel}`);
+        lines.push(`Mô hình: ${fastModel}`);
         return lines;
     }
 
-    lines.push(`Fast Model: ${fastModel}`);
-    lines.push(`Plan Model: ${planModel}`);
+    lines.push(`Mô hình Nhanh: ${fastModel}`);
+    lines.push(`Mô hình Kế hoạch: ${planModel}`);
     return lines;
 }
 
@@ -88,7 +88,7 @@ export function splitForEmbedDescription(text: string, maxLength: number = 3500)
  */
 export function fitForSingleEmbedDescription(text: string, maxLength: number = 3500): string {
     if (text.length <= maxLength) return text;
-    const prefix = '... (beginning truncated)\n';
+    const prefix = `...(phần đầu được lược bớt)\n`;
     const tailLength = Math.max(0, maxLength - prefix.length);
     return `${prefix}${text.slice(-tailLength)}`;
 }

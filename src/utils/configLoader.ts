@@ -5,7 +5,23 @@ import * as dotenv from 'dotenv';
 import type { AppConfig, ExtractionMode } from './config';
 import type { LogLevel } from './logger';
 
-dotenv.config({ quiet: true });
+console.log(`[DEBUG] Current working directory: ${process.cwd()}`);
+const envPath = path.resolve(process.cwd(), '.env');
+console.log(`[DEBUG] Explicitly loading env from: ${envPath}`);
+
+try {
+    const envResult = dotenv.config({ path: envPath, override: true });
+    console.log(`[DEBUG] envResult:`, envResult);
+    if (envResult.error) {
+        console.error(`[DEBUG] Dotenv error:`, envResult.error);
+    } else {
+        console.log(`[DEBUG] Dotenv keys parsed: ${Object.keys(envResult.parsed || {}).join(', ')}`);
+        console.log(`[DEBUG] TELEGRAM_BOT_TOKEN found in parsed: ${!!envResult.parsed?.TELEGRAM_BOT_TOKEN}`);
+        console.log(`[DEBUG] WORKSPACE_BASE_DIR found in parsed: ${!!envResult.parsed?.WORKSPACE_BASE_DIR}`);
+    }
+} catch (e: any) {
+    console.error(`[DEBUG] Critical Dotenv fail:`, e.message);
+}
 
 const CONFIG_DIR_NAME = '.antigravity-telegram-remote';
 const CONFIG_FILE_NAME = 'config.json';
@@ -61,7 +77,14 @@ function mergeConfig(persisted: PersistedConfig): AppConfig {
     }
 
     const defaultDir = path.join(os.homedir(), 'Code');
+
     const rawDir = process.env.WORKSPACE_BASE_DIR ?? persisted.workspaceBaseDir ?? defaultDir;
+    console.log(`[DEBUG] Raw workspace base dir: ${rawDir}`);
+    console.log(`[DEBUG] WORKSPACE_BASE_DIR: ${process.env.WORKSPACE_BASE_DIR}`);
+    console.log(`[DEBUG] persisted.workspaceBaseDir: ${persisted.workspaceBaseDir}`);
+    console.log(`[DEBUG] defaultDir: ${defaultDir}`);
+
+
     const workspaceBaseDir = expandTilde(rawDir);
 
     const autoApproveFileEdits = resolveBoolean(
@@ -152,6 +175,13 @@ export const ConfigLoader = {
 
     configExists(): boolean {
         return fs.existsSync(getConfigFilePath());
+    },
+
+    ensureConfigDirExists(): void {
+        const dir = getConfigDir();
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
     },
 
     load(persistedOverride?: PersistedConfig): AppConfig {

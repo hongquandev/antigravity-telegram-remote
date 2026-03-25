@@ -4,7 +4,7 @@ import * as path from 'path';
 
 import { logger } from './logger';
 
-const TEMP_VOICE_DIR = path.join(os.tmpdir(), 'remoat-voice');
+const TEMP_VOICE_DIR = path.join(os.tmpdir(), 'antigravity-telegram-remote-voice');
 
 /**
  * Check whether Whisper transcription is available.

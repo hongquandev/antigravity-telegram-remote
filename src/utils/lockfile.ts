@@ -3,7 +3,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
-const LOCK_FILE = path.join(os.homedir(), '.remoat', '.bot.lock');
+const LOCK_FILE = path.join(os.homedir(), '.antigravity-telegram-remote', '.bot.lock');
 
 /**
  * Check if a process with the given PID is running

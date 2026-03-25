@@ -8,7 +8,7 @@ import { logger } from './logger';
 
 const MAX_INBOUND_IMAGE_ATTACHMENTS = 4;
 const IMAGE_EXT_PATTERN = /\.(png|jpe?g|webp|gif|bmp)$/i;
-const TEMP_IMAGE_DIR = path.join(os.tmpdir(), 'remoat-images');
+const TEMP_IMAGE_DIR = path.join(os.tmpdir(), 'antigravity-telegram-remote-images');
 
 export interface InboundImageAttachment {
     localPath: string;
