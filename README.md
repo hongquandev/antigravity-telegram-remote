@@ -47,7 +47,7 @@ Chỉ cần gõ hướng dẫn bằng ngôn ngữ tự nhiên, đính kèm ảnh
 > [!NOTE]
 > **macOS User:** Bạn cần cài đặt Xcode Command Line Tools (`xcode-select --install`) để biên dịch `better-sqlite3`.
 
-### 1. Cài đặt Remoat
+### 1. Cài đặt
 ```bash
 npm install -g antigravity-telegram-remote
 ```
@@ -138,8 +138,12 @@ Xem thêm tại [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Phát hành dưới giấy phép [MIT](LICENSE).
 
----
-<p align="center">
-  Dựa trên kiến trúc <strong>Remoat</strong> bởi <a href="https://github.com/optimistengineer">optimistengineer</a>.<br>
-  Đã được tối ưu và tùy chỉnh bởi <strong>Quan Nguyen - TNM</strong>.
-</p>
+## 🙏 Lời cảm ơn
+
+Dự án này được khởi đầu và thừa hưởng kiến trúc cốt lõi từ project **[optimistengineer/remoat:main](https://github.com/optimistengineer/remoat)**. 
+
+Chúng tôi xin gửi lời cảm ơn chân thành đến đội ngũ tác giả ban đầu. Từ nền tảng vững chắc đó, phiên bản này đã được **Quan Nguyen - TNM** nghiên cứu, audit và nâng cấp toàn diện:
+- Chuyển đổi sang cơ chế **Event-Driven (MutationObserver)** để đạt hiệu năng vượt trội.
+- Thắt chặt bảo mật bằng giải thuật **realpath validation** chống Path Traversal qua symlinks.
+- Đa dạng hóa các loại đầu vào với **Local Whisper** và hỗ trợ đính kèm hình ảnh.
+- Bản địa hóa (i18n) hoàn toàn sang tiếng Việt để phù hợp với người dùng trong nước.
