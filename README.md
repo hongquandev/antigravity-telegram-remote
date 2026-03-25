@@ -22,7 +22,7 @@
 
 ---
 
-**AntiT** (Antigravity-Telegram-Remote) là một **Telegram Bot cục bộ** mạnh mẽ, cho phép bạn điều khiển từ xa IDE [Antigravity](https://antigravity.dev) trên PC — từ điện thoại, máy tính bảng hoặc bất cứ thiết bị nào có Telegram.
+**Antirlm** (Antigravity-Telegram-Remote) là một **Telegram Bot cục bộ** mạnh mẽ, cho phép bạn điều khiển từ xa IDE [Antigravity](https://antigravity.dev) trên PC — từ điện thoại, máy tính bảng hoặc bất cứ thiết bị nào có Telegram.
 
 Chỉ cần gõ hướng dẫn bằng ngôn ngữ tự nhiên, đính kèm ảnh chụp màn hình hoặc gửi ghi âm giọng nói. Remoat sẽ chuyển tiếp đến Antigravity qua Chrome DevTools Protocol (CDP), giám sát tiến trình thực tế theo thời gian thực và phản hồi kết quả trực tiếp về Telegram. **Tất cả dữ liệu và mã nguồn đều nằm an toàn trên máy của bạn.**
 
