@@ -309,7 +309,7 @@ locales/        bản dịch i18n (en, ja, vi)
 Các đóng góp được chào đón — dù là sửa lỗi, tính năng mới, cải tiến tài liệu hay phạm vi thử nghiệm.
 
 ```bash
-git clone https://github.com/optimistengineer/antigravity-telegram-remote.git
+git clone https://github.com/hongquandev/antigravity-telegram-remote.git
 cd antigravity-telegram-remote
 npm install
 cp .env.example .env  # điền vào các giá trị của bạn
