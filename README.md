@@ -17,7 +17,7 @@
   <a href="https://github.com/hongquandev/antigravity-telegram-remote/blob/main/LICENSE"><img src="https://img.shields.io/github/license/hongquandev/antigravity-telegram-remote?style=flat-square" alt="License" /></a>
   <img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen?style=flat-square&logo=node.js" alt="Node.js" />
   <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey?style=flat-square" alt="Platform" />
-  <img src="https://img.shields.io/badge/version-0.2.11-blue?style=flat-square" alt="Version" />
+  <img src="https://img.shields.io/badge/version-0.2.12-blue?style=flat-square" alt="Version" />
 </p>
 
 ---
