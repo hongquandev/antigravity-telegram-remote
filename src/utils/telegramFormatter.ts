@@ -100,7 +100,7 @@ export function formatForTelegram(text: string): string {
         }
 
         const isTableLine =
-            (trimmed.startsWith('|') && trimmed.endsWith('|') && trimmed.length > 2) ||
+            (trimmed.startsWith('|') && trimmed.length > 2) ||
             /^\|[\s\-:]+\|/.test(trimmed);
 
         const isTreeLine = /[├└│┌┐┘┤┬┴┼]/.test(line) ||

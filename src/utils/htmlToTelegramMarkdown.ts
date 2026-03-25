@@ -131,15 +131,18 @@ export function htmlToTelegramHtml(html: string): string {
             const rows: string[][] = [];
             const rowRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
             let rowMatch;
-            while ((rowMatch = rowRegex.exec(tableContent)) !== null) {
-                const cells: string[] = [];
-                const cellRegex = /<(?:td|th)[^>]*>([\s\S]*?)<\/(?:td|th)>/gi;
-                let cellMatch;
-                while ((cellMatch = cellRegex.exec(rowMatch[1])) !== null) {
-                    cells.push(stripTags(cellMatch[1]).trim());
-                }
-                if (cells.length > 0) rows.push(cells);
+        while ((rowMatch = rowRegex.exec(tableContent)) !== null) {
+            const cells: string[] = [];
+            const cellRegex = /<(?:td|th)[^>]*>([\s\S]*?)<\/(?:td|th)>/gi;
+            let cellMatch;
+            while ((cellMatch = cellRegex.exec(rowMatch[1])) !== null) {
+                const cellRaw = stripTags(cellMatch[1]).trim();
+                // Telegram HTML requires escaping < > & even inside <pre>
+                const escaped = cellRaw.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                cells.push(escaped);
             }
+            if (cells.length > 0) rows.push(cells);
+        }
             if (rows.length === 0) return '';
 
             const colCount = Math.max(...rows.map(r => r.length));
