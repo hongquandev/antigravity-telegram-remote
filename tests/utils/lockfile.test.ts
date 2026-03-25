@@ -7,7 +7,7 @@ import * as fs from 'fs';
 import { acquireLock } from '../../src/utils/lockfile';
 
 const mockedFs = fs as jest.Mocked<typeof fs>;
-const expectedLockPath = path.join(os.homedir(), '.remoat', '.bot.lock');
+const expectedLockPath = path.join(os.homedir(), '.antigravity-telegram-remote', '.bot.lock');
 
 describe('lockfile', () => {
     let processKillSpy: jest.SpyInstance;
@@ -41,7 +41,7 @@ describe('lockfile', () => {
         );
     });
 
-    it('ensures ~/.remoat directory is created', () => {
+    it('ensures ~/.antigravity-telegram-remote directory is created', () => {
         mockedFs.existsSync.mockReturnValue(false);
         mockedFs.mkdirSync.mockReturnValue(undefined as any);
         mockedFs.writeFileSync.mockReturnValue(undefined);

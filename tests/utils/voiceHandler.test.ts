@@ -2,7 +2,7 @@ import * as fs from 'fs/promises';
 import * as os from 'os';
 import * as path from 'path';
 
-const TEMP_VOICE_DIR = path.join(os.tmpdir(), 'remoat-voice');
+const TEMP_VOICE_DIR = path.join(os.tmpdir(), 'antigravity-telegram-remote-voice');
 
 // Mock fetch globally
 const mockFetch = jest.fn();

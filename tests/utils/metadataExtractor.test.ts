@@ -23,7 +23,7 @@ describe('Metadata Extractor', () => {
     });
 
     it('returns an empty object when no metadata is present', () => {
-        const footerText = 'Remoat System';
+        const footerText = 'antigravity-telegram-remote System';
         const result = extractMetadataFromFooter(footerText);
         expect(result.taskId).toBeUndefined();
         expect(result.directory).toBeUndefined();

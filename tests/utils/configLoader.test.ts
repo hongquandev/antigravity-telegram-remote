@@ -31,23 +31,23 @@ describe('ConfigLoader', () => {
     });
 
     describe('getConfigDir()', () => {
-        it('returns ~/.remoat', () => {
-            expect(ConfigLoader.getConfigDir()).toBe(path.join(os.homedir(), '.remoat'));
+        it('returns ~/.antigravity-telegram-remote', () => {
+            expect(ConfigLoader.getConfigDir()).toBe(path.join(os.homedir(), '.antigravity-telegram-remote'));
         });
     });
 
     describe('getConfigFilePath()', () => {
-        it('returns ~/.remoat/config.json', () => {
+        it('returns ~/.antigravity-telegram-remote/config.json', () => {
             expect(ConfigLoader.getConfigFilePath()).toBe(
-                path.join(os.homedir(), '.remoat', 'config.json'),
+                path.join(os.homedir(), '.antigravity-telegram-remote', 'config.json'),
             );
         });
     });
 
     describe('getDefaultDbPath()', () => {
-        it('returns ~/.remoat/antigravity.db', () => {
+        it('returns ~/.antigravity-telegram-remote/antigravity.db', () => {
             expect(ConfigLoader.getDefaultDbPath()).toBe(
-                path.join(os.homedir(), '.remoat', 'antigravity.db'),
+                path.join(os.homedir(), '.antigravity-telegram-remote', 'antigravity.db'),
             );
         });
     });
@@ -224,7 +224,7 @@ describe('ConfigLoader', () => {
     describe('save()', () => {
         it('creates directory and writes merged config', () => {
             mockedFs.existsSync.mockImplementation((p) => {
-                if (typeof p === 'string' && p.endsWith('.remoat')) return false;
+                if (typeof p === 'string' && p.endsWith('.antigravity-telegram-remote')) return false;
                 return false;
             });
             mockedFs.readFileSync.mockReturnValue('{}' as any);
@@ -234,7 +234,7 @@ describe('ConfigLoader', () => {
             ConfigLoader.save({ telegramBotToken: 'new-token' });
 
             expect(mockedFs.mkdirSync).toHaveBeenCalledWith(
-                expect.stringContaining('.remoat'),
+                expect.stringContaining('.antigravity-telegram-remote'),
                 { recursive: true },
             );
             expect(mockedFs.writeFileSync).toHaveBeenCalledWith(

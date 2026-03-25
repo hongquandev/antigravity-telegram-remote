@@ -25,7 +25,7 @@ const mockedOs = jest.mocked(os);
 
 // Stable home directory for all tests
 const FAKE_HOME = '/home/testuser';
-const CACHE_PATH = path.join(FAKE_HOME, '.remoat', UPDATE_CHECK_FILE);
+const CACHE_PATH = path.join(FAKE_HOME, '.antigravity-telegram-remote', UPDATE_CHECK_FILE);
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -118,7 +118,7 @@ describe('fetchLatestVersion', () => {
         const version = await fetchLatestVersion();
         expect(version).toBe('1.2.3');
         expect(mockedHttps.get).toHaveBeenCalledWith(
-            'https://registry.npmjs.org/remoat/latest',
+            'https://registry.npmjs.org/antigravity-telegram-remote/latest',
             expect.objectContaining({ timeout: 5000 }),
             expect.any(Function),
         );
