@@ -10,17 +10,17 @@ describe('streamMessageFormatter', () => {
         it('consolidates into a single line when both models are the same', () => {
             const lines = buildModeModelLines('Fast', 'Gemini 3.1 Pro (High)', 'Gemini 3.1 Pro (High)');
             expect(lines).toEqual([
-                'Current Mode: Fast',
-                'Model: Gemini 3.1 Pro (High)',
+                'Chế độ hiện tại: Fast',
+                'Mô hình: Gemini 3.1 Pro (High)',
             ]);
         });
 
         it('shows both Fast and Plan models when they differ', () => {
             const lines = buildModeModelLines('Planning', 'Claude Opus 4.6', 'Gemini 3.1 Pro');
             expect(lines).toEqual([
-                'Current Mode: Planning',
-                'Fast Model: Claude Opus 4.6',
-                'Plan Model: Gemini 3.1 Pro',
+                'Chế độ hiện tại: Planning',
+                'Mô hình Nhanh: Claude Opus 4.6',
+                'Mô hình Kế hoạch: Gemini 3.1 Pro',
             ]);
         });
     });
@@ -76,7 +76,7 @@ describe('streamMessageFormatter', () => {
             const fitted = fitForSingleEmbedDescription(text, 120);
 
             expect(fitted.length).toBeLessThanOrEqual(120);
-            expect(fitted.startsWith('... (beginning truncated)')).toBe(true);
+            expect(fitted.startsWith('...(phần đầu được lược bớt)')).toBe(true);
             expect(fitted).toContain('b'.repeat(40));
         });
     });

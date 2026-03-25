@@ -39,7 +39,7 @@ describe('sessionPickerUi', () => {
         it('returns empty keyboard for zero sessions', () => {
             const { text, keyboard } = buildSessionPickerUI([]);
 
-            expect(text).toContain('No sessions');
+            expect(text).toContain('Không tìm thấy phiên nào');
             expect(keyboard).toBeDefined();
         });
 

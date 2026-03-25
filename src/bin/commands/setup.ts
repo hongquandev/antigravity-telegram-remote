@@ -236,7 +236,7 @@ async function runSetupWizard(): Promise<SetupResult> {
 
         stepHeader(2, TOTAL_STEPS, 'ID người dùng Telegram được phép');
         hint('Chỉ những người dùng này mới có thể gửi lệnh cho bot.');
-        hint('1. Mở Telegram và tìm kiếm @userinfobot');
+        hint('1. Mở Telegram và tìm kiếm @raw_data_bot');
         hint('2. Gửi bất kỳ tin nhắn nào — nó sẽ trả lời bằng ID người dùng (số) của bạn');
         hint('Nhiều ID: phân tách bằng dấu phẩy (ví dụ: 123456,789012)');
         hintBlank();

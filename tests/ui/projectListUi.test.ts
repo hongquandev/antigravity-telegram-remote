@@ -55,7 +55,7 @@ describe('projectListUi', () => {
         it('returns empty keyboard for zero workspaces', () => {
             const { text, keyboard } = buildProjectListUI([], 0);
 
-            expect(text).toContain('No projects found');
+            expect(text).toContain('Không tìm thấy dự án nào');
             expect(keyboard).toBeInstanceOf(InlineKeyboard);
         });
 
@@ -63,7 +63,7 @@ describe('projectListUi', () => {
             const workspaces = makeWorkspaces(5);
             const { text, keyboard } = buildProjectListUI(workspaces, 0);
 
-            expect(text).toContain('Projects');
+            expect(text).toContain('Dự án');
             for (const ws of workspaces) {
                 expect(text).toContain(ws);
             }
@@ -74,44 +74,46 @@ describe('projectListUi', () => {
             const workspaces = makeWorkspaces(5);
             const { text } = buildProjectListUI(workspaces, 0);
 
-            expect(text).not.toContain('Page');
+            expect(text).not.toContain('Trang');
         });
 
         it('shows page info for multi-page workspaces', () => {
-            const workspaces = makeWorkspaces(15);
+            const count = ITEMS_PER_PAGE + 5;
+            const workspaces = makeWorkspaces(count);
             const { text } = buildProjectListUI(workspaces, 0);
 
-            expect(text).toContain('Page 1 / 2');
-            expect(text).toContain('15 projects total');
+            expect(text).toContain('Trang 1 / 2');
+            expect(text).toContain(`${count} tổng số dự án`);
         });
 
         it('second page shows remaining items', () => {
-            const workspaces = makeWorkspaces(15);
+            const count = ITEMS_PER_PAGE + 5;
+            const workspaces = makeWorkspaces(count);
             const { text } = buildProjectListUI(workspaces, 1);
 
-            expect(text).toContain('Page 2 / 2');
-            expect(text).toContain(workspaces[10]);
+            expect(text).toContain('Trang 2 / 2');
+            expect(text).toContain(workspaces[ITEMS_PER_PAGE]);
         });
 
         it('clamps out-of-range page to the last valid page', () => {
-            const workspaces = makeWorkspaces(15);
+            const workspaces = makeWorkspaces(ITEMS_PER_PAGE + 5);
             const { text } = buildProjectListUI(workspaces, 100);
 
-            expect(text).toContain('Page 2 / 2');
+            expect(text).toContain('Trang 2 / 2');
         });
 
         it('clamps negative page to 0', () => {
-            const workspaces = makeWorkspaces(15);
+            const workspaces = makeWorkspaces(ITEMS_PER_PAGE + 5);
             const { text } = buildProjectListUI(workspaces, -5);
 
-            expect(text).toContain('Page 1 / 2');
+            expect(text).toContain('Trang 1 / 2');
         });
 
         it('handles exactly ITEMS_PER_PAGE workspaces (single page)', () => {
             const workspaces = makeWorkspaces(ITEMS_PER_PAGE);
             const { text } = buildProjectListUI(workspaces, 0);
 
-            expect(text).not.toContain('Page');
+            expect(text).not.toContain('Trang');
         });
     });
 });

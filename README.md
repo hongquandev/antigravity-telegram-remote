@@ -1,14 +1,11 @@
-<p align="center" style="margin-bottom:0">
-  <img src="docs/images/owl-logo.svg" alt="antigravity-telegram-remote owl" width="240" />
-</p>
-<h1 align="center" style="margin-top:0">Antigravity Telegram Remote</h1>
+# antigravity-telegram-remote
 
 <p align="center">
   <strong>Điều khiển trợ lý lập trình AI của bạn từ bất cứ đâu — ngay từ Telegram.</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/optimistengineer/remoat/blob/main/LICENSE"><img src="https://img.shields.io/github/license/optimistengineer/remoat?style=flat-square" alt="License" /></a>
+  <a href="https://github.com/optimistengineer/antigravity-telegram-remote/blob/main/LICENSE"><img src="https://img.shields.io/github/license/optimistengineer/antigravity-telegram-remote?style=flat-square" alt="License" /></a>
   <img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen?style=flat-square&logo=node.js" alt="Node.js" />
   <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey?style=flat-square" alt="Platform" />
 </p>
@@ -42,7 +39,7 @@ Gõ một hướng dẫn bằng ngôn ngữ tự nhiên, đính kèm ảnh chụ
 <details>
 <summary>macOS: bạn cũng sẽ cần Xcode Command Line Tools</summary>
 
-Antigravity Telegram Remote sử dụng `better-sqlite3`, một mô-đun C++ gốc yêu cầu trình biên dịch. Nếu bạn chưa cài đặt công cụ Xcode CLI, hãy chạy:
+antigravity-telegram-remote sử dụng `better-sqlite3`, một mô-đun C++ gốc yêu cầu trình biên dịch. Nếu bạn chưa cài đặt công cụ Xcode CLI, hãy chạy:
 
 ```bash
 xcode-select --install
@@ -52,7 +49,7 @@ Bạn có thể xác minh chúng được cài đặt bằng `xcode-select -p`.
 
 </details>
 
-### 1. Cài đặt Antigravity Telegram Remote
+### 1. Cài đặt Remoat
 
 ```bash
 npm install -g antigravity-telegram-remote
@@ -119,7 +116,7 @@ npx nodejs-whisper download
 ### Từ nguồn
 
 ```bash
-git clone https://github.com/hongquandev/remoat.git
+git clone https://github.com/hongquandev/antigravity-telegram-remote.git
 cd antigravity-telegram-remote
 npm install
 cp .env.example .env
@@ -160,6 +157,33 @@ Từ nguồn, bạn cũng có thể sử dụng các tập lệnh khởi chạy 
 | macOS    | Nhấp đôi `start_antigravity_mac.command` (chạy `chmod +x` lần đầu tiên) |
 | Windows  | Nhấp đôi `start_antigravity_win.bat` |
 | Linux    | Đặt `ANTIGRAVITY_PATH=/path/to/antigravity` trong `.env`, sau đó `antigravity-telegram-remote open` |
+
+> Khởi động Antigravity trước, sau đó bắt đầu bot. Nó kết nối tự động.
+
+### Topic Diễn đàn (tùy chọn)
+
+Đối với quy trình làm việc đa dự án, Antigravity Telegram Remote hỗ trợ Chủ đề Diễn đàn Telegram — mỗi dự án có chủ đề riêng.
+
+1. Tạo một nhóm siêu Telegram và bật **Chủ đề** trong cài đặt nhóm
+2. Thêm bot của bạn vào nhóm với quyền quản trị
+3. Đặt `USE_TOPICS=true` trong `.env` (đây là mặc định)
+
+Đối với cài đặt đơn giản hơn, đặt `USE_TOPICS=false` và sử dụng bot trong một chat thông thường.
+
+## Lệnh
+
+### CLI
+
+```
+antigravity-telegram-remote              tự động phát hiện: chạy cài đặt nếu chưa được cấu hình, nếu không hãy khởi động bot
+antigravity-telegram-remote setup        trình hướng dẫn cài đặt tương tác
+antigravity-telegram-remote open         khởi động Antigravity với cổng CDP được bật
+antigravity-telegram-remote start        bắt đầu bot Telegram
+antigravity-telegram-remote doctor       chẩn đoán vấn đề cấu hình và kết nối
+antigravity-telegram-remote --verbose    hiển thị nhật ký ở mức gỡ lỗi (lưu lượng CDP, sự kiện trình phát hiện)
+antigravity-telegram-remote --quiet      chỉ lỗi
+```
+
 
 > Khởi động Antigravity trước, sau đó bắt đầu bot. Nó kết nối tự động.
 
@@ -285,7 +309,7 @@ locales/        bản dịch i18n (en, ja, vi)
 Các đóng góp được chào đón — dù là sửa lỗi, tính năng mới, cải tiến tài liệu hay phạm vi thử nghiệm.
 
 ```bash
-git clone https://github.com/optimistengineer/remoat.git
+git clone https://github.com/optimistengineer/antigravity-telegram-remote.git
 cd antigravity-telegram-remote
 npm install
 cp .env.example .env  # điền vào các giá trị của bạn
@@ -297,7 +321,7 @@ Xem [CONTRIBUTING.md](CONTRIBUTING.md) để biết hướng dẫn đầy đủ 
 
 ## Lịch sử sao
 
-[![Star History Chart](https://api.star-history.com/svg?repos=optimistengineer/remoat&type=date&legend=top-left)](https://www.star-history.com/#optimistengineer/remoat&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=optimistengineer/antigravity-telegram-remote&type=date&legend=top-left)](https://www.star-history.com/#optimistengineer/antigravity-telegram-remote&type=date&legend=top-left)
 
 ## Giấy phép
 
@@ -305,4 +329,4 @@ Xem [CONTRIBUTING.md](CONTRIBUTING.md) để biết hướng dẫn đầy đủ 
 
 ## Lời cảm ơn
 
-Dựa trên [Remoat](https://github.com/optimistengineer/remoat), bot Remote để điều khiển từ xa Antigravity qua CDP. Antigravity Telegram Remote chuyển kiến trúc cốt lõi sang Telegram và thêm các tính năng như Topic Diễn đàn, đầu vào giọng nói và trích xuất DOM được cấu trúc.
+Dựa trên [Remoat](https://github.com/optimistengineer/antigravity-telegram-remote), bot Remote để điều khiển từ xa Antigravity qua CDP. Antigravity Telegram Remote chuyển kiến trúc cốt lõi sang Telegram và thêm các tính năng như Topic Diễn đàn, đầu vào giọng nói và trích xuất DOM được cấu trúc.

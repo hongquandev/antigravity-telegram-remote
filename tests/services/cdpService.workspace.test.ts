@@ -3,6 +3,15 @@ import * as child_process from 'child_process';
 import { EventEmitter } from 'events';
 import * as pathUtils from '../../src/utils/pathUtils';
 
+// Mock pathUtils to avoid real filesystem checks during tests
+jest.mock('../../src/utils/pathUtils', () => {
+    const originalModule = jest.requireActual('../../src/utils/pathUtils');
+    return {
+        ...originalModule,
+        getAntigravityCliPath: jest.fn(),
+    };
+});
+
 // Mock logger to avoid printing during tests
 jest.mock('../../src/utils/logger', () => ({
     logger: {
@@ -41,6 +50,12 @@ describe('CdpService - Cross-Platform Workspace Launching', () => {
 
         // Mock findAvailableCdpPort to return the configured port (avoids real TCP listen)
         jest.spyOn(service as any, 'findAvailableCdpPort').mockResolvedValue(9999);
+        // Default mock for getAntigravityCliPath based on platform
+        (pathUtils.getAntigravityCliPath as jest.Mock).mockImplementation(() => {
+            if (process.platform === 'darwin') return '/Applications/Antigravity.app/Contents/Resources/app/bin/antigravity';
+            if (process.platform === 'win32') return process.env.LOCALAPPDATA ? `${process.env.LOCALAPPDATA}\\Programs\\Antigravity\\Antigravity.exe` : 'Antigravity.exe';
+            return process.env.ANTIGRAVITY_PATH || 'antigravity';
+        });
     });
 
     afterEach(() => {

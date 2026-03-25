@@ -37,18 +37,18 @@ describe('Config', () => {
 
     it('returns valid config if all required variables are set', () => {
         process.env.TELEGRAM_BOT_TOKEN = 'secret_token';
-        process.env.ALLOWED_USER_IDS = 'user1,user2';
+        process.env.ALLOWED_USER_IDS = '123456789,987654321';
         process.env.WORKSPACE_BASE_DIR = '/custom/dir';
 
         const config = loadConfig();
         expect(config.telegramBotToken).toEqual('secret_token');
-        expect(config.allowedUserIds).toEqual(['user1', 'user2']);
+        expect(config.allowedUserIds).toEqual(['123456789', '987654321']);
         expect(config.workspaceBaseDir).toEqual('/custom/dir');
     });
 
     it('returns default workspace base dir if not set', () => {
         process.env.TELEGRAM_BOT_TOKEN = 'secret_token';
-        process.env.ALLOWED_USER_IDS = 'user1';
+        process.env.ALLOWED_USER_IDS = '123456789';
         delete process.env.WORKSPACE_BASE_DIR;
 
         const config = loadConfig();
@@ -58,7 +58,7 @@ describe('Config', () => {
 
     it('defaults useTopics to true when not set', () => {
         process.env.TELEGRAM_BOT_TOKEN = 'secret_token';
-        process.env.ALLOWED_USER_IDS = 'user1';
+        process.env.ALLOWED_USER_IDS = '123456789';
         delete process.env.USE_TOPICS;
 
         const config = loadConfig();
@@ -67,7 +67,7 @@ describe('Config', () => {
 
     it('disables useTopics when set to false', () => {
         process.env.TELEGRAM_BOT_TOKEN = 'secret_token';
-        process.env.ALLOWED_USER_IDS = 'user1';
+        process.env.ALLOWED_USER_IDS = '123456789';
         process.env.USE_TOPICS = 'false';
 
         const config = loadConfig();
@@ -76,7 +76,7 @@ describe('Config', () => {
 
     it('defaults AUTO_APPROVE_FILE_EDITS to false when not set', () => {
         process.env.TELEGRAM_BOT_TOKEN = 'secret_token';
-        process.env.ALLOWED_USER_IDS = 'user1';
+        process.env.ALLOWED_USER_IDS = '123456789';
         delete process.env.AUTO_APPROVE_FILE_EDITS;
 
         const config = loadConfig();
@@ -85,7 +85,7 @@ describe('Config', () => {
 
     it('enables AUTO_APPROVE_FILE_EDITS when set to true', () => {
         process.env.TELEGRAM_BOT_TOKEN = 'secret_token';
-        process.env.ALLOWED_USER_IDS = 'user1';
+        process.env.ALLOWED_USER_IDS = '123456789';
         process.env.AUTO_APPROVE_FILE_EDITS = 'true';
 
         const config = loadConfig();
